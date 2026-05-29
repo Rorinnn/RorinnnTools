@@ -155,6 +155,14 @@ static void PushButtonColors(ButtonVariant Variant, StyleColorScope& ColorScope)
     }
 }
 
+static float CalcButtonAutoWidth(const char* Label)
+{
+    const char*       TextValue = Label ? Label : "";
+    const ImVec2      TextSize  = ImGui::CalcTextSize(TextValue, nullptr, true);
+    const SizeTokens& S         = Sizes();
+    return TextSize.x + S.FramePadding.x * 2.0f + 8.0f;
+}
+
 static bool HasVisibleLabel(const char* Label)
 {
     if (!Label) return false;
@@ -464,6 +472,10 @@ bool Button(const char* Label, const ImVec2& Size, ButtonVariant Variant)
     VarScope.Push(ImGuiStyleVar_FramePadding, Sizes().FramePadding);
 
     ImVec2 ActualSize = Size;
+    if (ActualSize.x <= 0.0f)
+    {
+        ActualSize.x = CalcButtonAutoWidth(Label);
+    }
     if (ActualSize.y <= 0.0f)
     {
         ActualSize.y = Sizes().ControlHeight;
