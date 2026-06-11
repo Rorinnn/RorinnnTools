@@ -7,13 +7,6 @@
 namespace RorinnnTools
 {
 
-struct MachineCodeResult
-{
-    bool        Success = false;
-    std::string MachineCode;
-    std::string Message;
-};
-
-MachineCodeResult BuildMachineCode();
+bool BuildMachineCode(std::string& MachineCode);
 
 } // namespace RorinnnTools

@@ -100,11 +100,6 @@ class ComRelease
     IUnknown* Value = nullptr;
 };
 
-static MachineCodeResult Fail(std::string Message)
-{
-    return MachineCodeResult{false, {}, std::move(Message)};
-}
-
 static std::string Trim(std::string Value)
 {
     auto IsSpace = [](unsigned char Char) { return std::isspace(Char) != 0; };
@@ -163,9 +158,10 @@ static std::string NormalizeSerial(std::string Value)
 {
     Value = Trim(std::move(Value));
     std::replace(Value.begin(), Value.end(), ' ', '_');
-    std::transform(Value.begin(), Value.end(), Value.begin(), [](unsigned char Char) {
-        return static_cast<char>(std::toupper(Char));
-    });
+    std::transform(Value.begin(),
+                   Value.end(),
+                   Value.begin(),
+                   [](unsigned char Char) { return static_cast<char>(std::toupper(Char)); });
     return Value;
 }
 
@@ -190,31 +186,27 @@ static bool IsValidSerialNumber(const std::string& SerialNumber)
         if (Value == Invalid) return false;
     }
 
-    return std::any_of(Value.begin(), Value.end(), [](unsigned char Char) {
-        return std::isalnum(Char) != 0 && Char != '0';
-    });
+    return std::any_of(
+        Value.begin(), Value.end(), [](unsigned char Char) { return std::isalnum(Char) != 0 && Char != '0'; });
 }
 
-static MachineCodeResult ConnectWmi(IWbemServices*& Services)
+static bool ConnectWmi(IWbemServices*& Services)
 {
     Services = nullptr;
 
     ComRelease Locator;
-    HRESULT    Result = CoCreateInstance(CLSID_WbemLocator,
-                                      nullptr,
-                                      CLSCTX_INPROC_SERVER,
-                                      IID_IWbemLocator,
-                                      reinterpret_cast<void**>(Locator.Out()));
+    HRESULT    Result = CoCreateInstance(
+        CLSID_WbemLocator, nullptr, CLSCTX_INPROC_SERVER, IID_IWbemLocator, reinterpret_cast<void**>(Locator.Out()));
     if (FAILED(Result))
     {
-        return Fail("create wmi locator failed");
+        return false;
     }
 
     Result = Locator.As<IWbemLocator>()->ConnectServer(
         _bstr_t(L"ROOT\\CIMV2"), nullptr, nullptr, nullptr, 0, nullptr, nullptr, &Services);
     if (FAILED(Result))
     {
-        return Fail("connect wmi failed");
+        return false;
     }
 
     Result = CoSetProxyBlanket(Services,
@@ -229,10 +221,10 @@ static MachineCodeResult ConnectWmi(IWbemServices*& Services)
     {
         Services->Release();
         Services = nullptr;
-        return Fail("set wmi proxy failed");
+        return false;
     }
 
-    return MachineCodeResult{true, {}, {}};
+    return true;
 }
 
 static std::vector<IWbemClassObject*> ExecuteWmiQuery(IWbemServices* Services, const wchar_t* Query)
@@ -241,7 +233,7 @@ static std::vector<IWbemClassObject*> ExecuteWmiQuery(IWbemServices* Services, c
     if (!Services || !Query) return Objects;
 
     IEnumWbemClassObject* Enumerator = nullptr;
-    HRESULT Result = Services->ExecQuery(
+    HRESULT               Result     = Services->ExecQuery(
         _bstr_t(L"WQL"), _bstr_t(Query), WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &Enumerator);
     if (FAILED(Result) || !Enumerator)
     {
@@ -360,7 +352,7 @@ static std::string GetHardwareInfo(IWbemServices* Services, const WmiQuery& Quer
     return Stream.str();
 }
 
-static MachineCodeResult Sha256Bytes(std::string_view Text, std::vector<uint8_t>& Hash)
+static bool Sha256Bytes(std::string_view Text, std::vector<uint8_t>& Hash)
 {
     Hash.clear();
 
@@ -370,25 +362,23 @@ static MachineCodeResult Sha256Bytes(std::string_view Text, std::vector<uint8_t>
     NTSTATUS Status = BCryptOpenAlgorithmProvider(&AlgHandle, BCRYPT_SHA256_ALGORITHM, nullptr, 0);
     if (Status < 0)
     {
-        return Fail("open sha256 provider failed");
+        return false;
     }
 
     Status = BCryptCreateHash(AlgHandle, &HashHandle, nullptr, 0, nullptr, 0, 0);
     if (Status < 0)
     {
         BCryptCloseAlgorithmProvider(AlgHandle, 0);
-        return Fail("create sha256 hash failed");
+        return false;
     }
 
-    Status = BCryptHashData(HashHandle,
-                            reinterpret_cast<PUCHAR>(const_cast<char*>(Text.data())),
-                            static_cast<ULONG>(Text.size()),
-                            0);
+    Status = BCryptHashData(
+        HashHandle, reinterpret_cast<PUCHAR>(const_cast<char*>(Text.data())), static_cast<ULONG>(Text.size()), 0);
     if (Status < 0)
     {
         BCryptDestroyHash(HashHandle);
         BCryptCloseAlgorithmProvider(AlgHandle, 0);
-        return Fail("hash data failed");
+        return false;
     }
 
     Hash.resize(32);
@@ -400,10 +390,10 @@ static MachineCodeResult Sha256Bytes(std::string_view Text, std::vector<uint8_t>
     if (Status < 0)
     {
         Hash.clear();
-        return Fail("finish sha256 hash failed");
+        return false;
     }
 
-    return MachineCodeResult{true, {}, {}};
+    return true;
 }
 
 static std::string Base64UrlEncode(const std::vector<uint8_t>& Bytes)
@@ -445,22 +435,23 @@ static std::string Base64UrlEncode(const std::vector<uint8_t>& Bytes)
 
 } // namespace
 
-MachineCodeResult BuildMachineCode()
+bool BuildMachineCode(std::string& MachineCode)
 {
+    MachineCode.clear();
+
     ComScope Com;
     if (!Com.IsReady())
     {
-        return Fail("wmi is unavailable");
+        return false;
     }
 
     IWbemServices* Services = nullptr;
-    auto           Connected = ConnectWmi(Services);
-    if (!Connected.Success)
+    if (!ConnectWmi(Services))
     {
-        return Connected;
+        return false;
     }
 
-    ComRelease ServicesScope(Services);
+    ComRelease     ServicesScope(Services);
     const WmiQuery Queries[] = {
         {L"SELECT SerialNumber FROM Win32_BaseBoard", L"SerialNumber", true},
         {L"SELECT ProcessorId FROM Win32_Processor", L"ProcessorId", true},
@@ -477,17 +468,17 @@ MachineCodeResult BuildMachineCode()
 
     if (Material.empty() || Material == "UnknownUnknown|Count:0|TotalSize:0")
     {
-        return Fail("machine identity is unavailable");
+        return false;
     }
 
     std::vector<uint8_t> Hash;
-    auto                 Hashed = Sha256Bytes(Material, Hash);
-    if (!Hashed.Success)
+    if (!Sha256Bytes(Material, Hash))
     {
-        return Hashed;
+        return false;
     }
 
-    return MachineCodeResult{true, Base64UrlEncode(Hash), {}};
+    MachineCode = Base64UrlEncode(Hash);
+    return true;
 }
 
 } // namespace RorinnnTools

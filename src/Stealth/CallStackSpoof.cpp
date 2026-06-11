@@ -5,13 +5,11 @@
 #include <Psapi.h>
 
 #include <algorithm>
-#include <cstdarg>
-#include <cstdio>
 #include <cstring>
 #include <random>
 #include <vector>
 
-namespace Rorinnn::Stealth
+namespace RorinnnTools::Stealth
 {
 
 // ShellCode 模板
@@ -280,18 +278,6 @@ static bool EnumProcessModulesGrowing(HANDLE Proc, std::vector<HMODULE>& Modules
     return false;
 }
 
-// CallStackSpoof 实现
-void CallStackSpoof::LogF(const char* Fmt, ...) const
-{
-    if (!m_LogFn) return;
-    char    Buf[512];
-    va_list Ap;
-    va_start(Ap, Fmt);
-    _vsnprintf_s(Buf, sizeof(Buf), _TRUNCATE, Fmt, Ap);
-    va_end(Ap);
-    m_LogFn(Buf);
-}
-
 static bool WriteShellcodeToCave(uint8_t* Dest, const uint8_t* Source, size_t Size)
 {
     DWORD OldProtect = 0;
@@ -310,12 +296,10 @@ bool CallStackSpoof::Init(uint64_t XorKey)
 
     HMODULE Self = GetSelfModuleHandle();
 
-    // 枚举 + 宿主挑选 + 诊断日志
     HANDLE               Proc = GetCurrentProcess();
     std::vector<HMODULE> Modules;
     if (!EnumProcessModulesGrowing(Proc, Modules) || Modules.empty())
     {
-        LogF("CallStackSpoof: EnumProcessModules failed, err=%lu", GetLastError());
         return false;
     }
 
@@ -323,32 +307,23 @@ bool CallStackSpoof::Init(uint64_t XorKey)
     std::mt19937       Gen(Rd());
     std::shuffle(Modules.begin(), Modules.end(), Gen);
 
-    uint8_t* Slot    = nullptr;
-    int      Scanned = 0, NoCave = 0, Skipped = 0;
+    uint8_t* Slot = nullptr;
     for (HMODULE Mod : Modules)
     {
         if (Mod == Self) continue;
         char Name[MAX_PATH] = {};
         if (K32GetModuleBaseNameA(Proc, Mod, Name, MAX_PATH) == 0) continue;
-        if (IsForbiddenHostName(Name))
-        {
-            ++Skipped;
-            continue;
-        }
-        ++Scanned;
+        if (IsForbiddenHostName(Name)) continue;
 
         Slot = SearchCodeCaveInModule(Mod, sizeof(SpoofShellcodeTemplate));
         if (Slot)
         {
-            LogF("CallStackSpoof: trampoline placed in %s at %p (scanned=%d skipped=%d)", Name, Slot, Scanned, Skipped);
             break;
         }
-        ++NoCave;
     }
 
     if (!Slot)
     {
-        LogF("CallStackSpoof: no cave found (scanned=%d no_cave=%d skipped=%d)", Scanned, NoCave, Skipped);
         return false;
     }
 
@@ -360,7 +335,6 @@ bool CallStackSpoof::Init(uint64_t XorKey)
 
     if (!WriteShellcodeToCave(Slot, Buffer, sizeof(Buffer)))
     {
-        LogF("CallStackSpoof: WriteShellcodeToCave failed");
         return false;
     }
 
@@ -368,4 +342,4 @@ bool CallStackSpoof::Init(uint64_t XorKey)
     return true;
 }
 
-} // namespace Rorinnn::Stealth
+} // namespace RorinnnTools::Stealth

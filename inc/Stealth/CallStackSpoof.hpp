@@ -7,21 +7,13 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace Rorinnn::Stealth
+namespace RorinnnTools::Stealth
 {
-
-using SpoofLogFn = void (*)(const char* Message);
 
 class CallStackSpoof
 {
   public:
     CallStackSpoof() = default;
-
-    // 注入诊断日志回调 (可选). 不设置时内部静默.
-    void SetLogCallback(SpoofLogFn Callback)
-    {
-        m_LogFn = Callback;
-    }
 
     // 在随机合法宿主模块内寄生 trampoline. 幂等; 失败返回 false.
     // XorKey 为 0 时返回 false.
@@ -61,15 +53,13 @@ class CallStackSpoof
     }
 
   private:
-    uint64_t   m_Trampoline = 0;
-    SpoofLogFn m_LogFn      = nullptr;
-
-    void LogF(const char* Fmt, ...) const;
+    uint64_t m_Trampoline = 0;
 };
 
 template <class Ret, class... Args> Ret SpoofRetType(Ret (*)(Args...));
 
-} // namespace Rorinnn::Stealth
+} // namespace RorinnnTools::Stealth
 
-#define CALL_STACK_SPOOF(SpoofInst, Func, ...) \
-    (SpoofInst).Invoke<decltype(::Rorinnn::Stealth::SpoofRetType(Func))>(reinterpret_cast<void*>(Func), __VA_ARGS__)
+#define CALL_STACK_SPOOF(SpoofInst, Func, ...)                                                               \
+    (SpoofInst).Invoke<decltype(::RorinnnTools::Stealth::SpoofRetType(Func))>(reinterpret_cast<void*>(Func), \
+                                                                              __VA_ARGS__)
