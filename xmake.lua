@@ -10,7 +10,7 @@ end
 
 set_targetdir("build/$(mode)")
 
-add_requires("imgui", {configs = {dx11 = true, win32 = true}})
+add_requires("imgui", {configs = {dx11 = true, dx12 = true, win32 = true}})
 
 local ProjectDir = os.scriptdir()
 local GeneratedDir = path.join(ProjectDir, "Generated")
