@@ -107,7 +107,7 @@ LocateStatus LocateD3D12(D3D12Methods& Out)
         void* Ptr = *VTable;
         if (!Ptr) break;
 
-        Out.DeviceMethods.push_back(Ptr);
+        Out.DeviceMethods.push_back({VTable, Ptr});
     }
 
     for (auto VTable = *reinterpret_cast<void***>(CommandQueue); VTable; VTable++)
@@ -115,7 +115,7 @@ LocateStatus LocateD3D12(D3D12Methods& Out)
         void* Ptr = *VTable;
         if (!Ptr) break;
 
-        Out.CommandQueueMethods.push_back(Ptr);
+        Out.CommandQueueMethods.push_back({VTable, Ptr});
     }
 
     for (auto VTable = *reinterpret_cast<void***>(CommandAllocator); VTable; VTable++)
@@ -123,7 +123,7 @@ LocateStatus LocateD3D12(D3D12Methods& Out)
         void* Ptr = *VTable;
         if (!Ptr) break;
 
-        Out.CommandAllocatorMethods.push_back(Ptr);
+        Out.CommandAllocatorMethods.push_back({VTable, Ptr});
     }
 
     for (auto VTable = *reinterpret_cast<void***>(CommandList); VTable; VTable++)
@@ -131,7 +131,7 @@ LocateStatus LocateD3D12(D3D12Methods& Out)
         void* Ptr = *VTable;
         if (!Ptr) break;
 
-        Out.CommandListMethods.push_back(Ptr);
+        Out.CommandListMethods.push_back({VTable, Ptr});
     }
 
     for (auto VTable = *reinterpret_cast<void***>(SwapChain); VTable; VTable++)
@@ -139,7 +139,7 @@ LocateStatus LocateD3D12(D3D12Methods& Out)
         void* Ptr = *VTable;
         if (!Ptr) break;
 
-        Out.SwapChainMethods.push_back(Ptr);
+        Out.SwapChainMethods.push_back({VTable, Ptr});
     }
 
     return LocateStatus::Ok;

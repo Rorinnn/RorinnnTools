@@ -34,4 +34,10 @@ enum class LocateStatus : uint32_t
     D3D12CreateSwapChainFailed,
 };
 
+struct VTableEntry
+{
+    void** Slot    = nullptr;
+    void*  Address = nullptr;
+};
+
 } // namespace RorinnnTools::Graphics

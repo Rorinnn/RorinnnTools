@@ -86,7 +86,7 @@ LocateStatus LocateD3D10(D3D10Methods& Out)
         void* Ptr = *VTable;
         if (!Ptr) break;
 
-        Out.SwapChainMethods.push_back(Ptr);
+        Out.SwapChainMethods.push_back({VTable, Ptr});
     }
 
     for (auto VTable = *reinterpret_cast<void***>(Device); VTable; VTable++)
@@ -94,7 +94,7 @@ LocateStatus LocateD3D10(D3D10Methods& Out)
         void* Ptr = *VTable;
         if (!Ptr) break;
 
-        Out.DeviceMethods.push_back(Ptr);
+        Out.DeviceMethods.push_back({VTable, Ptr});
     }
 
     return LocateStatus::Ok;

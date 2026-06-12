@@ -111,7 +111,7 @@ LocateStatus LocateD3D11(D3D11Methods& Out)
         void* Ptr = *VTable;
         if (!Ptr) break;
 
-        Out.SwapChainMethods.push_back(Ptr);
+        Out.SwapChainMethods.push_back({VTable, Ptr});
     }
 
     for (auto VTable = *reinterpret_cast<void***>(Device); VTable; VTable++)
@@ -119,7 +119,7 @@ LocateStatus LocateD3D11(D3D11Methods& Out)
         void* Ptr = *VTable;
         if (!Ptr) break;
 
-        Out.DeviceMethods.push_back(Ptr);
+        Out.DeviceMethods.push_back({VTable, Ptr});
     }
 
     for (auto VTable = *reinterpret_cast<void***>(Context); VTable; VTable++)
@@ -127,7 +127,7 @@ LocateStatus LocateD3D11(D3D11Methods& Out)
         void* Ptr = *VTable;
         if (!Ptr) break;
 
-        Out.ContextMethods.push_back(Ptr);
+        Out.ContextMethods.push_back({VTable, Ptr});
     }
 
     return LocateStatus::Ok;

@@ -10,7 +10,7 @@ namespace RorinnnTools::Graphics
 {
 struct D3D9Methods
 {
-    std::vector<void*> DeviceMethods;
+    std::vector<VTableEntry> DeviceMethods;
 };
 
 LocateStatus LocateD3D9(D3D9Methods& Out);

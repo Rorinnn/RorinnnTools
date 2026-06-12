@@ -10,11 +10,11 @@ namespace RorinnnTools::Graphics
 {
 struct D3D12Methods
 {
-    std::vector<void*> DeviceMethods;
-    std::vector<void*> CommandQueueMethods;
-    std::vector<void*> CommandAllocatorMethods;
-    std::vector<void*> CommandListMethods;
-    std::vector<void*> SwapChainMethods;
+    std::vector<VTableEntry> DeviceMethods;
+    std::vector<VTableEntry> CommandQueueMethods;
+    std::vector<VTableEntry> CommandAllocatorMethods;
+    std::vector<VTableEntry> CommandListMethods;
+    std::vector<VTableEntry> SwapChainMethods;
 };
 
 LocateStatus LocateD3D12(D3D12Methods& Out);

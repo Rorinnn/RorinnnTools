@@ -10,8 +10,8 @@ namespace RorinnnTools::Graphics
 {
 struct D3D10Methods
 {
-    std::vector<void*> SwapChainMethods;
-    std::vector<void*> DeviceMethods;
+    std::vector<VTableEntry> SwapChainMethods;
+    std::vector<VTableEntry> DeviceMethods;
 };
 
 LocateStatus LocateD3D10(D3D10Methods& Out);

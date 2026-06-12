@@ -53,7 +53,7 @@ LocateStatus LocateD3D9(D3D9Methods& Out)
         void* Ptr = *VTable;
         if (!Ptr) break;
 
-        Out.DeviceMethods.push_back(Ptr);
+        Out.DeviceMethods.push_back({VTable, Ptr});
     }
 
     return LocateStatus::Ok;
