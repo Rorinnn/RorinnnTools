@@ -7,23 +7,6 @@
 namespace RorinnnTools::ImguiRorinnn
 {
 
-enum class ThemeMode
-{
-    Dark,
-    Light,
-};
-
-enum class AccentColor
-{
-    Blue,
-    Green,
-    Orange,
-    Purple,
-    Rose,
-    White,
-    Custom,
-};
-
 namespace Color
 {
 inline const ImVec4 Transparent = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
@@ -84,20 +67,14 @@ struct SizeTokens
 
 struct Theme
 {
-    ThemeMode   Mode         = ThemeMode::Dark;
-    AccentColor Accent       = AccentColor::Blue;
-    ImVec4      CustomAccent = ImVec4(0.20f, 0.54f, 0.92f, 1.0f);
     ColorTokens Colors{};
     SizeTokens  Sizes{};
 };
 
-Theme MakeTheme(ThemeMode   Mode         = ThemeMode::Dark,
-                AccentColor Accent       = AccentColor::Blue,
-                ImVec4      CustomAccent = ImVec4(0.20f, 0.54f, 0.92f, 1.0f));
+Theme MakeTheme();
 
 void SetTheme(const Theme& NewTheme);
 void ApplyTheme(const Theme& NewTheme);
-void ApplyTheme(ThemeMode Mode, AccentColor Accent = AccentColor::Blue);
 
 const Theme&       GetTheme();
 const ColorTokens& Colors();

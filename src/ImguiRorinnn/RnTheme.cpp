@@ -18,39 +18,6 @@ static ImVec4 Col(float R, float G, float B, float A = 1.0f)
     return ImVec4(R, G, B, A);
 }
 
-struct AccentToken
-{
-    AccentColor Accent;
-    ImVec4      Color;
-};
-
-static ImVec4 ResolveAccent(AccentColor Accent, const ImVec4& CustomAccent)
-{
-    if (Accent == AccentColor::Custom)
-    {
-        return CustomAccent;
-    }
-
-    static const AccentToken AccentTokens[] = {
-        {AccentColor::Blue, Color::Blue},
-        {AccentColor::Green, Color::Green},
-        {AccentColor::Orange, Color::Orange},
-        {AccentColor::Purple, Color::Purple},
-        {AccentColor::Rose, Color::Rose},
-        {AccentColor::White, Color::SoftWhite},
-    };
-
-    for (const AccentToken& Token : AccentTokens)
-    {
-        if (Token.Accent == Accent)
-        {
-            return Token.Color;
-        }
-    }
-
-    return Color::Blue;
-}
-
 static void ApplyStyleFromTheme(const Theme& ThemeValue)
 {
     if (!ImGui::GetCurrentContext())
@@ -88,7 +55,7 @@ static void ApplyStyleFromTheme(const Theme& ThemeValue)
     Colors[ImGuiCol_Text]                 = C.Text;
     Colors[ImGuiCol_TextDisabled]         = C.TextDisabled;
     Colors[ImGuiCol_WindowBg]             = C.Background;
-    Colors[ImGuiCol_ChildBg]              = WithAlpha(C.Surface, 0.62f);
+    Colors[ImGuiCol_ChildBg]              = C.Surface;
     Colors[ImGuiCol_PopupBg]              = C.Overlay;
     Colors[ImGuiCol_Border]               = C.Border;
     Colors[ImGuiCol_BorderShadow]         = WithAlpha(C.Background, 0.0f);
@@ -109,9 +76,9 @@ static void ApplyStyleFromTheme(const Theme& ThemeValue)
     Colors[ImGuiCol_Button]               = C.Surface;
     Colors[ImGuiCol_ButtonHovered]        = C.SurfaceHover;
     Colors[ImGuiCol_ButtonActive]         = C.SurfaceActive;
-    Colors[ImGuiCol_Header]               = WithAlpha(C.SurfaceHover, 0.72f);
-    Colors[ImGuiCol_HeaderHovered]        = WithAlpha(C.Accent, 0.32f);
-    Colors[ImGuiCol_HeaderActive]         = WithAlpha(C.Accent, 0.42f);
+    Colors[ImGuiCol_Header]               = WithAlpha(C.AccentText, 0.10f);
+    Colors[ImGuiCol_HeaderHovered]        = WithAlpha(C.AccentText, 0.17f);
+    Colors[ImGuiCol_HeaderActive]         = WithAlpha(C.AccentText, 0.22f);
     Colors[ImGuiCol_Separator]            = WithAlpha(C.Border, 0.0f);
     Colors[ImGuiCol_SeparatorHovered]     = WithAlpha(C.Border, 0.0f);
     Colors[ImGuiCol_SeparatorActive]      = WithAlpha(C.Border, 0.0f);
@@ -123,6 +90,9 @@ static void ApplyStyleFromTheme(const Theme& ThemeValue)
     Colors[ImGuiCol_TabActive]            = C.SurfaceActive;
     Colors[ImGuiCol_TabUnfocused]         = C.Surface;
     Colors[ImGuiCol_TabUnfocusedActive]   = C.SurfaceHover;
+    Colors[ImGuiCol_TableHeaderBg]        = WithAlpha(C.AccentText, 0.10f);
+    Colors[ImGuiCol_TableRowBg]           = C.Surface;
+    Colors[ImGuiCol_TableRowBgAlt]        = C.SurfaceHover;
     Colors[ImGuiCol_TextSelectedBg]       = WithAlpha(C.Accent, 0.34f);
     Colors[ImGuiCol_NavHighlight]         = WithAlpha(C.Accent, 0.42f);
     Colors[ImGuiCol_ModalWindowDimBg]     = WithAlpha(Color::Black, 0.46f);
@@ -132,52 +102,29 @@ static Theme g_BaseTheme = MakeTheme();
 static Theme g_Theme     = g_BaseTheme;
 } // namespace
 
-Theme MakeTheme(ThemeMode Mode, AccentColor Accent, ImVec4 CustomAccent)
+Theme MakeTheme()
 {
     Theme Result{};
-    Result.Mode         = Mode;
-    Result.Accent       = Accent;
-    Result.CustomAccent = CustomAccent;
 
-    const bool   Dark        = Mode == ThemeMode::Dark;
-    const ImVec4 AccentValue = ResolveAccent(Accent, CustomAccent);
+    const ImVec4 AccentValue = Color::SoftWhite;
 
-    Result.Colors.Accent = AccentValue;
-    Result.Colors.AccentHover =
-        Dark ? Blend(AccentValue, Col(1.0f, 1.0f, 1.0f), 0.12f) : Blend(AccentValue, Col(1.0f, 1.0f, 1.0f), 0.20f);
-    Result.Colors.AccentActive =
-        Dark ? Blend(AccentValue, Col(0.0f, 0.0f, 0.0f), 0.20f) : Blend(AccentValue, Col(0.0f, 0.0f, 0.0f), 0.16f);
-    Result.Colors.AccentText = Col(0.98f, 0.99f, 1.0f);
-    Result.Colors.Success    = Color::Green;
-    Result.Colors.Warning    = Color::Orange;
-    Result.Colors.Danger     = Color::Red;
-
-    if (Dark)
-    {
-        Result.Colors.Background    = Col(0.055f, 0.065f, 0.080f);
-        Result.Colors.Surface       = Col(0.105f, 0.120f, 0.145f);
-        Result.Colors.SurfaceHover  = Col(0.140f, 0.160f, 0.190f);
-        Result.Colors.SurfaceActive = Col(0.180f, 0.205f, 0.240f);
-        Result.Colors.Overlay       = Col(0.070f, 0.082f, 0.100f, 0.96f);
-        Result.Colors.Border        = Col(0.260f, 0.300f, 0.350f, 0.55f);
-        Result.Colors.BorderStrong  = Col(0.360f, 0.410f, 0.480f, 0.72f);
-        Result.Colors.Text          = Col(0.920f, 0.950f, 0.980f);
-        Result.Colors.TextMuted     = Col(0.650f, 0.700f, 0.760f);
-        Result.Colors.TextDisabled  = Col(0.420f, 0.460f, 0.510f);
-    }
-    else
-    {
-        Result.Colors.Background    = Col(0.955f, 0.960f, 0.970f);
-        Result.Colors.Surface       = Col(1.000f, 1.000f, 1.000f);
-        Result.Colors.SurfaceHover  = Col(0.925f, 0.935f, 0.950f);
-        Result.Colors.SurfaceActive = Col(0.885f, 0.900f, 0.925f);
-        Result.Colors.Overlay       = Col(0.985f, 0.988f, 0.994f, 0.96f);
-        Result.Colors.Border        = Col(0.680f, 0.710f, 0.760f, 0.60f);
-        Result.Colors.BorderStrong  = Col(0.500f, 0.540f, 0.610f, 0.74f);
-        Result.Colors.Text          = Col(0.090f, 0.110f, 0.140f);
-        Result.Colors.TextMuted     = Col(0.380f, 0.420f, 0.480f);
-        Result.Colors.TextDisabled  = Col(0.620f, 0.650f, 0.700f);
-    }
+    Result.Colors.Accent        = AccentValue;
+    Result.Colors.AccentHover   = Blend(AccentValue, Col(1.0f, 1.0f, 1.0f), 0.12f);
+    Result.Colors.AccentActive  = Blend(AccentValue, Col(0.0f, 0.0f, 0.0f), 0.20f);
+    Result.Colors.AccentText    = Col(0.98f, 0.99f, 1.0f);
+    Result.Colors.Success       = Color::Green;
+    Result.Colors.Warning       = Color::Orange;
+    Result.Colors.Danger        = Color::Red;
+    Result.Colors.Background    = WithAlpha(Color::DarkSlate, 0.38f);
+    Result.Colors.Surface       = WithAlpha(Color::SoftWhite, 0.12f);
+    Result.Colors.SurfaceHover  = WithAlpha(Color::White, 0.19f);
+    Result.Colors.SurfaceActive = WithAlpha(Color::White, 0.26f);
+    Result.Colors.Overlay       = WithAlpha(Color::DarkSlate, 0.64f);
+    Result.Colors.Border        = WithAlpha(Color::SoftWhite, 0.13f);
+    Result.Colors.BorderStrong  = WithAlpha(Color::SoftWhite, 0.22f);
+    Result.Colors.Text          = WithAlpha(Color::White, 0.99f);
+    Result.Colors.TextMuted     = WithAlpha(Color::SoftWhite, 0.82f);
+    Result.Colors.TextDisabled  = WithAlpha(Color::LightGray, 0.48f);
 
     return Result;
 }
@@ -192,11 +139,6 @@ void ApplyTheme(const Theme& NewTheme)
 {
     SetTheme(NewTheme);
     ApplyStyleFromTheme(g_Theme);
-}
-
-void ApplyTheme(ThemeMode Mode, AccentColor Accent)
-{
-    ApplyTheme(MakeTheme(Mode, Accent));
 }
 
 const Theme& GetTheme()
