@@ -1,4 +1,4 @@
-# 二进制资源转 C++ 头文件。
+# 二进制资源转 C++ 头文件 / 源文件。
 
 from pathlib import Path
 import sys
@@ -20,8 +20,7 @@ def BuildIdentifier(Value):
     return Text
 
 
-def BuildHeader(InputPath, DisplayPath, OutputFileName, Namespace, Name):
-    Data = InputPath.read_bytes()
+def BuildHeader(DisplayPath, OutputFileName, Namespace, Name):
     Lines = [
         "#pragma once",
         "",
@@ -33,7 +32,25 @@ def BuildHeader(InputPath, DisplayPath, OutputFileName, Namespace, Name):
         "",
         f"namespace {Namespace}",
         "{",
-        f"inline constexpr std::uint8_t {Name}[] = {{",
+        f"extern const std::uint8_t {Name}[];",
+        f"extern const std::size_t {Name}Size;",
+        f"}} // namespace {Namespace}",
+        "",
+    ]
+    return "\n".join(Lines)
+
+
+def BuildSource(InputPath, DisplayPath, HeaderFileName, OutputFileName, Namespace, Name):
+    Data = InputPath.read_bytes()
+    Lines = [
+        f"// {OutputFileName} — 嵌入式二进制资源",
+        f"// 自动生成: {DisplayPath}",
+        "",
+        f'#include "{HeaderFileName}"',
+        "",
+        f"namespace {Namespace}",
+        "{",
+        f"extern const std::uint8_t {Name}[] = {{",
     ]
 
     for Offset in range(0, len(Data), 16):
@@ -43,11 +60,17 @@ def BuildHeader(InputPath, DisplayPath, OutputFileName, Namespace, Name):
 
     Lines.extend([
         "};",
-        f"inline constexpr std::size_t {Name}Size = sizeof({Name});",
+        f"extern const std::size_t {Name}Size = sizeof({Name});",
         f"}} // namespace {Namespace}",
         "",
     ])
     return "\n".join(Lines)
+
+
+def WriteIfChanged(PathValue, Content):
+    OldContent = PathValue.read_text(encoding="utf-8") if PathValue.exists() else ""
+    if Content != OldContent:
+        PathValue.write_text(Content, encoding="utf-8", newline="\n")
 
 
 def Main():
@@ -57,6 +80,7 @@ def Main():
 
     InputPath = Path(sys.argv[1]).resolve()
     OutputPath = Path(sys.argv[2]).resolve()
+    SourcePath = OutputPath.with_suffix(".cpp")
     Namespace = sys.argv[3] if len(sys.argv) >= 4 else "RorinnnTools::Resources"
     Name = BuildIdentifier(sys.argv[4] if len(sys.argv) >= 5 else InputPath.stem)
     try:
@@ -65,9 +89,11 @@ def Main():
         DisplayPath = InputPath.as_posix()
 
     OutputPath.parent.mkdir(parents=True, exist_ok=True)
-    OutputPath.write_text(BuildHeader(InputPath, DisplayPath, OutputPath.name, Namespace, Name),
-                          encoding="utf-8",
-                          newline="\n")
+    WriteIfChanged(OutputPath, BuildHeader(DisplayPath, OutputPath.name, Namespace, Name))
+    WriteIfChanged(
+        SourcePath,
+        BuildSource(InputPath, DisplayPath, OutputPath.name, SourcePath.name, Namespace, Name),
+    )
     return 0
 
 

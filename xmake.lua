@@ -22,7 +22,7 @@ target("RorinnnTools")
     add_files("src/**.cpp")
     add_packages("imgui", {public = true})
     add_syslinks("kernel32", "user32", "advapi32", "psapi", "ole32", "wbemuuid", "bcrypt", "windowscodecs", "d3dcompiler")
-    before_build(function ()
+    on_load(function (target)
         os.execv("python", {
             path.join(ProjectDir, "GenerateBinaryResource.py"),
             path.join(ProjectDir, "assets/ImguiRorinnn/Fonts/fa-solid-900.ttf"),
@@ -37,4 +37,6 @@ target("RorinnnTools")
             "RorinnnTools::ImguiRorinnn::Resources",
             "FontAwesomeBrandsData"
         })
+        target:add("files", path.join(GeneratedDir, "ImguiRorinnn/Resources/FontAwesomeSolidResource.cpp"))
+        target:add("files", path.join(GeneratedDir, "ImguiRorinnn/Resources/FontAwesomeBrandsResource.cpp"))
     end)
