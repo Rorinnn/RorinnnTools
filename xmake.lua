@@ -11,6 +11,7 @@ end
 set_targetdir("build/$(mode)")
 
 add_requires("imgui", {configs = {dx11 = true, dx12 = true, win32 = true}})
+add_requires("zlib")
 
 local ProjectDir = os.scriptdir()
 local GeneratedDir = path.join(ProjectDir, "Generated")
@@ -21,7 +22,8 @@ target("RorinnnTools")
     add_includedirs("inc", GeneratedDir, {public = true})
     add_files("src/**.cpp")
     add_packages("imgui", {public = true})
-    add_syslinks("kernel32", "user32", "advapi32", "psapi", "ole32", "wbemuuid", "bcrypt", "windowscodecs", "d3dcompiler")
+    add_packages("zlib", {public = true})
+    add_syslinks("kernel32", "user32", "advapi32", "psapi", "ole32", "wbemuuid", "bcrypt", "windowscodecs", "d3dcompiler", "crypt32")
     on_load(function (target)
         os.execv("python", {
             path.join(ProjectDir, "GenerateBinaryResource.py"),
