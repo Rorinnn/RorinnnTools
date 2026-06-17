@@ -2,10 +2,6 @@
 
 module;
 
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-
 #include <limits>
 #include <vector>
 

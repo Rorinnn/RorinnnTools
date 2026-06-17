@@ -2,10 +2,6 @@
 
 module;
 
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-
 module RorinnnTools;
 
 namespace RorinnnTools::ImguiRorinnn

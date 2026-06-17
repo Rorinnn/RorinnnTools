@@ -1,9 +1,5 @@
 module;
 
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-
 #include <Windows.h>
 #include <d3d11.h>
 #include <imgui.h>

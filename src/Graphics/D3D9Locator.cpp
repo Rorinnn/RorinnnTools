@@ -2,10 +2,6 @@
 
 module;
 
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-
 #include <Windows.h>
 #include <d3d9.h>
 
