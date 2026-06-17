@@ -10,9 +10,13 @@ module;
 #include <cctype>
 #include <cstdint>
 #include <cstdlib>
+#include <exception>
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include <botan/base64.h>
+#include <botan/hash.h>
 
 module RorinnnTools;
 
@@ -353,6 +357,43 @@ static std::string GetHardwareInfo(IWbemServices* Services, const WmiQuery& Quer
     return Stream.str();
 }
 
+static bool BuildSha256Base64Url(std::string_view Text, std::string& Result)
+{
+    Result.clear();
+
+    try
+    {
+        auto Hasher = Botan::HashFunction::create_or_throw("SHA-256");
+        Hasher->update(Text);
+        std::vector<uint8_t> Hash = Hasher->final_stdvec();
+
+        Result = Botan::base64_encode(Hash.data(), Hash.size());
+        for (char& Char : Result)
+        {
+            if (Char == '+')
+            {
+                Char = '-';
+            }
+            else if (Char == '/')
+            {
+                Char = '_';
+            }
+        }
+
+        while (!Result.empty() && Result.back() == '=')
+        {
+            Result.pop_back();
+        }
+
+        return true;
+    }
+    catch (const std::exception&)
+    {
+        Result.clear();
+        return false;
+    }
+}
+
 } // namespace
 
 bool BuildMachineCode(std::string& MachineCode)
@@ -391,14 +432,7 @@ bool BuildMachineCode(std::string& MachineCode)
         return false;
     }
 
-    std::vector<uint8_t> Hash;
-    if (!Crypto::Sha256Bytes(Material, Hash))
-    {
-        return false;
-    }
-
-    MachineCode = Encoding::Base64UrlEncode(Hash);
-    return true;
+    return BuildSha256Base64Url(Material, MachineCode);
 }
 
 } // namespace RorinnnTools
