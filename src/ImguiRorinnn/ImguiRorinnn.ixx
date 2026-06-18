@@ -4,20 +4,9 @@ module;
 #include <d3d11.h>
 #include <imgui.h>
 
-#include <cstddef>
 #include <cstdint>
 
 export module RorinnnTools:ImguiRorinnn;
-
-namespace RorinnnTools::ImguiRorinnn::Resources
-{
-
-extern const std::uint8_t FontAwesomeBrandsData[];
-extern const std::size_t  FontAwesomeBrandsDataSize;
-extern const std::uint8_t FontAwesomeSolidData[];
-extern const std::size_t  FontAwesomeSolidDataSize;
-
-} // namespace RorinnnTools::ImguiRorinnn::Resources
 
 export namespace RorinnnTools::ImguiRorinnn
 {

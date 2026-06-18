@@ -20,6 +20,7 @@ target("RorinnnTools")
     set_kind("static")
     set_languages("cxx20")
     set_policy("build.c++.modules", true)
+    add_rules("utils.bin2obj")
     add_defines("NOMINMAX", {public = true})
     add_files("src/**.ixx", {public = true})
     add_files("src/**.cpp")
@@ -27,24 +28,12 @@ target("RorinnnTools")
     add_packages("botan")
     add_syslinks("kernel32", "user32", "advapi32", "psapi", "ole32", "wbemuuid", "windowscodecs", "d3dcompiler")
     on_load(function (target)
-        os.execv("python", {
-            path.join(ProjectDir, "GenerateBinaryResource.py"),
-            path.join(ProjectDir, "assets/ImguiRorinnn/Fonts/fa-solid-900.ttf"),
-            path.join(GeneratedDir, "ImguiRorinnn/Resources/FontAwesomeSolidResource.hpp"),
-            "RorinnnTools::ImguiRorinnn::Resources",
-            "FontAwesomeSolidData",
-            "--module",
-            "RorinnnTools"
-        })
-        os.execv("python", {
-            path.join(ProjectDir, "GenerateBinaryResource.py"),
-            path.join(ProjectDir, "assets/ImguiRorinnn/Fonts/fa-brands-400.ttf"),
-            path.join(GeneratedDir, "ImguiRorinnn/Resources/FontAwesomeBrandsResource.hpp"),
-            "RorinnnTools::ImguiRorinnn::Resources",
-            "FontAwesomeBrandsData",
-            "--module",
-            "RorinnnTools"
-        })
-        target:add("files", path.join(GeneratedDir, "ImguiRorinnn/Resources/FontAwesomeSolidResource.cpp"))
-        target:add("files", path.join(GeneratedDir, "ImguiRorinnn/Resources/FontAwesomeBrandsResource.cpp"))
+        local ResourceDir = path.join(GeneratedDir, "ImguiRorinnn/Resources")
+        local SolidBin = path.join(ResourceDir, "FontAwesomeSolid.bin")
+        local BrandsBin = path.join(ResourceDir, "FontAwesomeBrands.bin")
+        os.mkdir(ResourceDir)
+        os.cp(path.join(ProjectDir, "assets/ImguiRorinnn/Fonts/fa-solid-900.ttf"), SolidBin)
+        os.cp(path.join(ProjectDir, "assets/ImguiRorinnn/Fonts/fa-brands-400.ttf"), BrandsBin)
+        target:add("files", SolidBin)
+        target:add("files", BrandsBin)
     end)

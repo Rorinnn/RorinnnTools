@@ -6,15 +6,34 @@ module;
 #include <Windows.h>
 #endif
 
+#include <cstddef>
+#include <cstdint>
+#include <limits>
+
 #include <imgui.h>
 
 module RorinnnTools;
+
+extern "C"
+{
+    extern const std::uint8_t _binary_FontAwesomeBrands_bin_start[];
+    extern const std::uint8_t _binary_FontAwesomeBrands_bin_end[];
+    extern const std::uint8_t _binary_FontAwesomeSolid_bin_start[];
+    extern const std::uint8_t _binary_FontAwesomeSolid_bin_end[];
+}
 
 namespace RorinnnTools::ImguiRorinnn
 {
 namespace
 {
 static FontSet g_Fonts;
+
+static size_t GetEmbeddedResourceSize(const uint8_t* PStart, const uint8_t* PEnd)
+{
+    const auto Start = reinterpret_cast<std::uintptr_t>(PStart);
+    const auto End   = reinterpret_cast<std::uintptr_t>(PEnd);
+    return End >= Start ? End - Start : 0;
+}
 
 static ImFont* LoadWindowsTextFont(ImFontAtlas* Atlas, float TextSize, bool& UsedDefaultFont)
 {
@@ -35,6 +54,12 @@ static ImFont* LoadWindowsTextFont(ImFontAtlas* Atlas, float TextSize, bool& Use
 
 static ImFont* LoadIconFont(ImFontAtlas* Atlas, float IconSize, bool FixedWidth)
 {
+    const size_t SolidSize = GetEmbeddedResourceSize(_binary_FontAwesomeSolid_bin_start, _binary_FontAwesomeSolid_bin_end);
+    if (SolidSize == 0 || SolidSize > static_cast<size_t>(std::numeric_limits<int>::max()))
+    {
+        return nullptr;
+    }
+
     ImFontConfig Config{};
     Config.FontDataOwnedByAtlas = false;
     Config.MergeMode            = false;
@@ -42,8 +67,8 @@ static ImFont* LoadIconFont(ImFontAtlas* Atlas, float IconSize, bool FixedWidth)
     Config.GlyphMinAdvanceX     = FixedWidth ? IconSize : 0.0f;
 
     static const ImWchar SolidRanges[] = {0xF000, 0xF8FF, 0};
-    return Atlas->AddFontFromMemoryTTF((void*)Resources::FontAwesomeSolidData,
-                                       (int)Resources::FontAwesomeSolidDataSize,
+    return Atlas->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(_binary_FontAwesomeSolid_bin_start),
+                                       static_cast<int>(SolidSize),
                                        IconSize,
                                        &Config,
                                        SolidRanges);
@@ -51,6 +76,13 @@ static ImFont* LoadIconFont(ImFontAtlas* Atlas, float IconSize, bool FixedWidth)
 
 static bool LoadBrandIcons(ImFontAtlas* Atlas, float IconSize, bool FixedWidth)
 {
+    const size_t BrandsSize =
+        GetEmbeddedResourceSize(_binary_FontAwesomeBrands_bin_start, _binary_FontAwesomeBrands_bin_end);
+    if (BrandsSize == 0 || BrandsSize > static_cast<size_t>(std::numeric_limits<int>::max()))
+    {
+        return false;
+    }
+
     ImFontConfig Config{};
     Config.MergeMode            = true;
     Config.FontDataOwnedByAtlas = false;
@@ -58,8 +90,8 @@ static bool LoadBrandIcons(ImFontAtlas* Atlas, float IconSize, bool FixedWidth)
     Config.GlyphMinAdvanceX     = FixedWidth ? IconSize : 0.0f;
 
     static const ImWchar BrandRanges[] = {0xF09B, 0xF09B, 0xF392, 0xF392, 0};
-    return Atlas->AddFontFromMemoryTTF((void*)Resources::FontAwesomeBrandsData,
-                                       (int)Resources::FontAwesomeBrandsDataSize,
+    return Atlas->AddFontFromMemoryTTF(const_cast<std::uint8_t*>(_binary_FontAwesomeBrands_bin_start),
+                                       static_cast<int>(BrandsSize),
                                        IconSize,
                                        &Config,
                                        BrandRanges) != nullptr;
