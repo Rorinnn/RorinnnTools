@@ -6,7 +6,6 @@ module;
 #include <comdef.h>
 #include <wbemidl.h>
 
-
 #include <botan/base64.h>
 #include <botan/hash.h>
 
@@ -27,8 +26,8 @@ struct WmiQuery
 
 struct DiskInfo
 {
-    std::string SerialNumber;
-    std::uint64_t    Size = 0;
+    std::string   SerialNumber;
+    std::uint64_t Size = 0;
 };
 
 class ComScope
@@ -89,7 +88,8 @@ class ComRelease
         return &Value;
     }
 
-    template <typename T> T* As() const
+    template <typename T>
+    T* As() const
     {
         return reinterpret_cast<T*>(Value);
     }
@@ -100,7 +100,8 @@ class ComRelease
 
 static std::string Trim(std::string Value)
 {
-    auto IsSpace = [](unsigned char Char) { return std::isspace(Char) != 0; };
+    auto IsSpace = [](unsigned char Char)
+    { return std::isspace(Char) != 0; };
     Value.erase(Value.begin(), std::find_if_not(Value.begin(), Value.end(), IsSpace));
     Value.erase(std::find_if_not(Value.rbegin(), Value.rend(), IsSpace).base(), Value.end());
     return Value;
@@ -147,7 +148,7 @@ static std::uint64_t VariantToUInt64(const VARIANT& Value)
     std::string Text = VariantToString(Value);
     if (Text.empty()) return 0;
 
-    char*    End  = nullptr;
+    char*         End  = nullptr;
     std::uint64_t Size = std::strtoull(Text.c_str(), &End, 10);
     return End && *End == '\0' ? Size : 0;
 }
@@ -159,7 +160,8 @@ static std::string NormalizeSerial(std::string Value)
     std::transform(Value.begin(),
                    Value.end(),
                    Value.begin(),
-                   [](unsigned char Char) { return static_cast<char>(std::toupper(Char)); });
+                   [](unsigned char Char)
+                   { return static_cast<char>(std::toupper(Char)); });
     return Value;
 }
 
@@ -185,7 +187,8 @@ static bool IsValidSerialNumber(const std::string& SerialNumber)
     }
 
     return std::any_of(
-        Value.begin(), Value.end(), [](unsigned char Char) { return std::isalnum(Char) != 0 && Char != '0'; });
+        Value.begin(), Value.end(), [](unsigned char Char)
+        { return std::isalnum(Char) != 0 && Char != '0'; });
 }
 
 static bool ConnectWmi(IWbemServices*& Services)

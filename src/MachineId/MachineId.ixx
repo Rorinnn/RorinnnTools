@@ -1,6 +1,5 @@
 module;
 
-
 export module RorinnnTools:MachineId;
 import std;
 

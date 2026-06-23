@@ -2,7 +2,6 @@ module;
 
 #include <Windows.h>
 
-
 export module RorinnnTools:Hook;
 import std;
 
@@ -51,13 +50,13 @@ using VehHookCallback = std::function<void(VehHookType Type, PEXCEPTION_POINTERS
 
 struct VehHookOptions
 {
-    int             Token           = 0;
-    void*           TargetAddress   = nullptr;
-    void*           RedirectAddress = nullptr;
-    VehHookType     Type            = VehHookType::Int3;
-    VehHookCallback Callback        = {};
-    const std::uint8_t*  TrampolineBytes = nullptr;
-    std::size_t          TrampolineSize  = 0;
+    int                 Token           = 0;
+    void*               TargetAddress   = nullptr;
+    void*               RedirectAddress = nullptr;
+    VehHookType         Type            = VehHookType::Int3;
+    VehHookCallback     Callback        = {};
+    const std::uint8_t* TrampolineBytes = nullptr;
+    std::size_t         TrampolineSize  = 0;
 };
 
 VehHookStatus InstallVehHookHandler();
@@ -68,7 +67,7 @@ VehHookStatus AddVehHook(const VehHookOptions& Options);
 VehHookStatus RemoveVehHook(int Token);
 VehHookStatus RemoveAllVehHooks();
 VehHookStatus RefreshHardwareVehHooks();
-std::size_t        GetVehHookCount();
+std::size_t   GetVehHookCount();
 
 const char* GetVehHookStatusName(VehHookStatus Status);
 

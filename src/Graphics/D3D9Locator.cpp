@@ -27,11 +27,13 @@ LocateStatus LocateD3D9(D3D9Methods& Out)
 
     IDirect3D9* Direct3D = Direct3DCreate9Fn(D3D_SDK_VERSION);
     if (!Direct3D) return LocateStatus::D3D9Direct3DCreate9Failed;
-    auto Direct3DGuard = detail::MakeScopeExit([&]() { Direct3D->Release(); });
+    auto Direct3DGuard = detail::MakeScopeExit([&]()
+                                               { Direct3D->Release(); });
 
     detail::DummyWin32Window Window{};
     detail::CreateDummyWin32Window(Window);
-    auto WindowGuard = detail::MakeScopeExit([&]() { detail::DestroyDummyWin32Window(Window); });
+    auto WindowGuard = detail::MakeScopeExit([&]()
+                                             { detail::DestroyDummyWin32Window(Window); });
 
     D3DPRESENT_PARAMETERS PresentParameters{};
     PresentParameters.Windowed      = TRUE;
@@ -40,13 +42,14 @@ LocateStatus LocateD3D9(D3D9Methods& Out)
 
     IDirect3DDevice9* Device;
     HRESULT           HResult = Direct3D->CreateDevice(D3DADAPTER_DEFAULT,
-                                             D3DDEVTYPE_HAL,
-                                             Window.WindowHandle,
-                                             D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-                                             &PresentParameters,
-                                             &Device);
+                                                       D3DDEVTYPE_HAL,
+                                                       Window.WindowHandle,
+                                                       D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+                                                       &PresentParameters,
+                                                       &Device);
     if (HResult != S_OK) return LocateStatus::D3D9CreateDeviceFailed;
-    auto DeviceGuard = detail::MakeScopeExit([&]() { Device->Release(); });
+    auto DeviceGuard = detail::MakeScopeExit([&]()
+                                             { Device->Release(); });
 
     for (auto VTable = *reinterpret_cast<void***>(Device); VTable; VTable++)
     {

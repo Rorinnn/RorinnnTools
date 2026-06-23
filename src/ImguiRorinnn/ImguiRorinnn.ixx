@@ -4,7 +4,6 @@ module;
 #include <d3d11.h>
 #include <imgui.h>
 
-
 export module RorinnnTools:ImguiRorinnn;
 import std;
 

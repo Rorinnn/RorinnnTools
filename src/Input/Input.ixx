@@ -2,7 +2,6 @@ module;
 
 #include <Windows.h>
 
-
 export module RorinnnTools:Input;
 import std;
 

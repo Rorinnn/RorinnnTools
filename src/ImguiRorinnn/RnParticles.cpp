@@ -2,7 +2,6 @@
 
 module;
 
-
 #include <imgui.h>
 
 module RorinnnTools;
@@ -100,15 +99,15 @@ void DrawSnowflakes(const char* Id, const ImVec2& Min, const ImVec2& Max, const 
     for (int Index = 0; Index < Options.Count; Index++)
     {
         const std::uint32_t Seed         = Hash(static_cast<std::uint32_t>(BaseId) ^ static_cast<std::uint32_t>(Index * 977u + 17u));
-        const float    Radius       = Lerp(MinRadius, MaxRadius, UnitFloat(Seed + 1u));
-        const float    Speed        = Lerp(MinSpeed, MaxSpeed, UnitFloat(Seed + 2u));
-        const float    Phase        = UnitFloat(Seed + 3u) * 6.2831853f;
-        const float    Drift        = Lerp(Options.Drift * 0.35f, Options.Drift, UnitFloat(Seed + 4u));
-        const float    Alpha        = Options.Color.w * Lerp(0.42f, 1.0f, UnitFloat(Seed + 5u));
-        const float    TravelHeight = Height + MaxRadius * 8.0f;
-        const float    BaseX        = Min.x + UnitFloat(Seed + 6u) * Width;
-        const float    WrappedY     = Wrap(UnitFloat(Seed + 7u) * TravelHeight + Time * Speed, TravelHeight);
-        const float    X            = BaseX + std::sin(Time * 0.75f + Phase) * Drift +
+        const float         Radius       = Lerp(MinRadius, MaxRadius, UnitFloat(Seed + 1u));
+        const float         Speed        = Lerp(MinSpeed, MaxSpeed, UnitFloat(Seed + 2u));
+        const float         Phase        = UnitFloat(Seed + 3u) * 6.2831853f;
+        const float         Drift        = Lerp(Options.Drift * 0.35f, Options.Drift, UnitFloat(Seed + 4u));
+        const float         Alpha        = Options.Color.w * Lerp(0.42f, 1.0f, UnitFloat(Seed + 5u));
+        const float         TravelHeight = Height + MaxRadius * 8.0f;
+        const float         BaseX        = Min.x + UnitFloat(Seed + 6u) * Width;
+        const float         WrappedY     = Wrap(UnitFloat(Seed + 7u) * TravelHeight + Time * Speed, TravelHeight);
+        const float         X            = BaseX + std::sin(Time * 0.75f + Phase) * Drift +
                         Time * Options.Wind * Lerp(0.10f, 0.55f, UnitFloat(Seed + 8u));
         const float Y        = Min.y - MaxRadius * 4.0f + WrappedY;
         const float WrappedX = Min.x + Wrap(X - Min.x, Width);

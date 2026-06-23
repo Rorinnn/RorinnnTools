@@ -1,6 +1,5 @@
 module;
 
-
 export module RorinnnTools:Memory;
 import std;
 
@@ -12,7 +11,8 @@ bool IsReadablePtr(std::uintptr_t Ptr);
 bool IsReadableRange(std::uintptr_t Ptr, std::size_t Size);
 bool ReadPtr(std::uintptr_t Ptr, std::uintptr_t& Value);
 
-template <typename T> bool ReadValue(std::uintptr_t Ptr, T& Value)
+template <typename T>
+bool ReadValue(std::uintptr_t Ptr, T& Value)
 {
     if (!ReadBytes(Ptr, &Value, sizeof(T)))
     {

@@ -5,7 +5,6 @@ module;
 #include <Windows.h>
 #include <TlHelp32.h>
 
-
 module RorinnnTools;
 import std;
 
@@ -24,10 +23,10 @@ struct VehHookRecord
     void*                     TargetAddress     = nullptr;
     void*                     RedirectAddress   = nullptr;
     VehHookType               Type              = VehHookType::Int3;
-    std::uint8_t                   OriginalByte      = 0;
+    std::uint8_t              OriginalByte      = 0;
     void*                     TrampolineAddress = nullptr;
-    std::size_t                    TrampolineSize    = 0;
-    std::vector<std::uint8_t>      TrampolineBytes   = {};
+    std::size_t               TrampolineSize    = 0;
+    std::vector<std::uint8_t> TrampolineBytes   = {};
     std::unordered_set<DWORD> TraceThreadIds    = {};
     VehHookCallback           Callback          = {};
 };
@@ -394,8 +393,9 @@ static VehHookStatus ApplyHardwareBreakpointToThreads(const VehHookRecord& Recor
 static std::size_t CountHardwareHooks()
 {
     return static_cast<std::size_t>(std::count_if(HookRecords.begin(),
-                                             HookRecords.end(),
-                                             [](const VehHookRecord& Record) { return IsHardwareType(Record.Type); }));
+                                                  HookRecords.end(),
+                                                  [](const VehHookRecord& Record)
+                                                  { return IsHardwareType(Record.Type); }));
 }
 
 static VehHookStatus InstallHookRecord(VehHookRecord& Record)
@@ -562,7 +562,8 @@ static bool IsTraceStepPending(int Token, DWORD ThreadId)
 {
     std::lock_guard<std::mutex> Guard(HookMutex);
     const auto                  Found = std::find_if(
-        HookRecords.begin(), HookRecords.end(), [&](const VehHookRecord& Record) { return Record.Token == Token; });
+        HookRecords.begin(), HookRecords.end(), [&](const VehHookRecord& Record)
+        { return Record.Token == Token; });
     if (Found == HookRecords.end())
     {
         return false;
@@ -685,7 +686,8 @@ VehHookStatus AddVehHook(const VehHookOptions& Options)
 
     const auto Exists = std::find_if(HookRecords.begin(),
                                      HookRecords.end(),
-                                     [&](const VehHookRecord& Record) { return Record.Token == Options.Token; });
+                                     [&](const VehHookRecord& Record)
+                                     { return Record.Token == Options.Token; });
     if (Exists != HookRecords.end())
     {
         return VehHookStatus::DuplicateToken;
@@ -694,7 +696,8 @@ VehHookStatus AddVehHook(const VehHookOptions& Options)
     const auto SameTarget =
         std::find_if(HookRecords.begin(),
                      HookRecords.end(),
-                     [&](const VehHookRecord& Record) { return Record.TargetAddress == Options.TargetAddress; });
+                     [&](const VehHookRecord& Record)
+                     { return Record.TargetAddress == Options.TargetAddress; });
     if (SameTarget != HookRecords.end())
     {
         return VehHookStatus::DuplicateTarget;
@@ -726,7 +729,8 @@ VehHookStatus RemoveVehHook(int Token)
     std::lock_guard<std::mutex> Guard(HookMutex);
 
     const auto Found = std::find_if(
-        HookRecords.begin(), HookRecords.end(), [&](const VehHookRecord& Record) { return Record.Token == Token; });
+        HookRecords.begin(), HookRecords.end(), [&](const VehHookRecord& Record)
+        { return Record.Token == Token; });
     if (Found == HookRecords.end())
     {
         return VehHookStatus::TokenNotFound;

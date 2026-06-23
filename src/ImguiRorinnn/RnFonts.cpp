@@ -6,7 +6,6 @@ module;
 #include <Windows.h>
 #endif
 
-
 #include <imgui.h>
 
 module RorinnnTools;

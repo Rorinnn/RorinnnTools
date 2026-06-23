@@ -2,7 +2,6 @@
 
 module;
 
-
 #include <d3d11.h>
 #include <imgui.h>
 #include <wincodec.h>
@@ -58,7 +57,7 @@ static bool CreateTextureFromBitmap(ID3D11Device* Device, IWICBitmapSource* Bitm
         return false;
     }
 
-    const UINT           BufferSize = Stride * Height;
+    const UINT                BufferSize = Stride * Height;
     std::vector<std::uint8_t> Pixels(BufferSize);
     if (FAILED(BitmapSource->CopyPixels(nullptr, Stride, BufferSize, Pixels.data())))
     {

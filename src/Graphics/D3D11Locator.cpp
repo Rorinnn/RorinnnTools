@@ -45,12 +45,14 @@ LocateStatus LocateD3D11(D3D11Methods& Out)
     IDXGIFactory* Factory;
     HRESULT       HResult = CreateDXGIFactoryFn(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&Factory));
     if (HResult != S_OK) return LocateStatus::D3D11CreateDXGIFactoryFailed;
-    auto FactoryGuard = detail::MakeScopeExit([&]() { Factory->Release(); });
+    auto FactoryGuard = detail::MakeScopeExit([&]()
+                                              { Factory->Release(); });
 
     IDXGIAdapter* Adapter;
     HResult = Factory->EnumAdapters(0, &Adapter);
     if (HResult != S_OK) return LocateStatus::D3D11EnumAdaptersFailed;
-    auto AdapterGuard = detail::MakeScopeExit([&]() { Adapter->Release(); });
+    auto AdapterGuard = detail::MakeScopeExit([&]()
+                                              { Adapter->Release(); });
 
     auto D3D11CreateDeviceAndSwapChainFn =
         reinterpret_cast<D3D11CreateDeviceAndSwapChain_t>(GetProcAddress(D3D11Module, "D3D11CreateDeviceAndSwapChain"));
@@ -58,7 +60,8 @@ LocateStatus LocateD3D11(D3D11Methods& Out)
 
     detail::DummyWin32Window Window{};
     detail::CreateDummyWin32Window(Window);
-    auto WindowGuard = detail::MakeScopeExit([&]() { detail::DestroyDummyWin32Window(Window); });
+    auto WindowGuard = detail::MakeScopeExit([&]()
+                                             { detail::DestroyDummyWin32Window(Window); });
 
     DXGI_SWAP_CHAIN_DESC SwapChainDesc{};
     SwapChainDesc.BufferDesc.Width                   = 100;

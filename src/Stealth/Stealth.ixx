@@ -1,6 +1,5 @@
 module;
 
-
 export module RorinnnTools:Stealth;
 import std;
 
@@ -44,6 +43,7 @@ class CallStackSpoof
     std::uint64_t m_Trampoline = 0;
 };
 
-template <class Ret, class... Args> Ret SpoofRetType(Ret (*)(Args...));
+template <class Ret, class... Args>
+Ret SpoofRetType(Ret (*)(Args...));
 
 } // namespace RorinnnTools::Stealth

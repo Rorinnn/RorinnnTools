@@ -2,7 +2,6 @@
 
 module;
 
-
 #include <imgui_internal.h>
 
 #ifdef _WIN32
@@ -977,8 +976,8 @@ void Spinner(const char* Id, float Radius, float Thickness)
 
 bool BeginTable(const char* Id, int ColumnCount, ImGuiTableFlags Flags, const ImVec2& OuterSize)
 {
-    const ColorTokens& C = Colors();
-    const SizeTokens&  S = Sizes();
+    const ColorTokens& C          = Colors();
+    const SizeTokens&  S          = Sizes();
     int                ColorCount = 0;
     int                VarCount   = 0;
     ImGui::PushStyleColor(ImGuiCol_TableHeaderBg, Color::Transparent);
@@ -994,7 +993,7 @@ bool BeginTable(const char* Id, int ColumnCount, ImGuiTableFlags Flags, const Im
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(ImMax(10.0f, S.ItemGap), S.ItemGap * 0.55f));
     VarCount++;
 
-    const ImVec2 Pos = ImGui::GetCursorScreenPos();
+    const ImVec2 Pos      = ImGui::GetCursorScreenPos();
     ImDrawList*  DrawList = ImGui::GetWindowDrawList();
     DrawList->ChannelsSplit(2);
     DrawList->ChannelsSetCurrent(1);
@@ -1050,8 +1049,8 @@ void TableHeadersRow(const char* const Headers[], int HeaderCount)
 
 void EndTable()
 {
-    TableFrame Frame = {};
-    bool HasFrame = false;
+    TableFrame Frame    = {};
+    bool       HasFrame = false;
     if (!g_TableFrames.empty())
     {
         Frame = g_TableFrames.back();
@@ -1070,8 +1069,8 @@ void EndTable()
     Frame.Max = ImGui::GetItemRectMax();
     if (Frame.Max.x <= Frame.Min.x || Frame.Max.y <= Frame.Min.y)
     {
-        Frame.Min = Frame.Pos;
-        Frame.Max = ImGui::GetCursorScreenPos();
+        Frame.Min   = Frame.Pos;
+        Frame.Max   = ImGui::GetCursorScreenPos();
         Frame.Max.x = Frame.Min.x + ImGui::GetContentRegionAvail().x;
     }
 

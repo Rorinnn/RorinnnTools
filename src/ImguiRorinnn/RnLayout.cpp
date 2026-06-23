@@ -2,7 +2,6 @@
 
 module;
 
-
 #include <imgui_internal.h>
 
 module RorinnnTools;
@@ -130,9 +129,9 @@ static bool DrawModuleCheckbox(const ImRect& Bounds, ImGuiID Id, bool* Value, bo
         }
     }
 
-    const ColorTokens& C        = Colors();
-    ImDrawList*        DrawList = ImGui::GetWindowDrawList();
-    const float        CheckT   = SmoothValue(ChildId(Id, "Check"), *Value ? 1.0f : 0.0f, 18.0f, *Value ? 1.0f : 0.0f);
+    const ColorTokens& C          = Colors();
+    ImDrawList*        DrawList   = ImGui::GetWindowDrawList();
+    const float        CheckT     = SmoothValue(ChildId(Id, "Check"), *Value ? 1.0f : 0.0f, 18.0f, *Value ? 1.0f : 0.0f);
     ImVec4             FrameColor = Hovered && Enabled ? C.SurfaceHover : C.Surface;
     if (*Value)
     {

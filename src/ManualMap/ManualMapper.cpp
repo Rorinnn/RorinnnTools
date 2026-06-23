@@ -4,7 +4,6 @@ module;
 
 #include <Windows.h>
 
-
 module RorinnnTools;
 import std;
 

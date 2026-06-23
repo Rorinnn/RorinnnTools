@@ -2,7 +2,6 @@ module;
 
 #include <Windows.h>
 
-
 export module RorinnnTools:Graphics;
 import std;
 
@@ -18,7 +17,8 @@ struct DummyWin32Window
 void CreateDummyWin32Window(DummyWin32Window& Window);
 void DestroyDummyWin32Window(DummyWin32Window& Window);
 
-template <typename F> class ScopeExit
+template <typename F>
+class ScopeExit
 {
   public:
     explicit ScopeExit(F Callback) : Callback(std::move(Callback)) {}
@@ -34,7 +34,8 @@ template <typename F> class ScopeExit
     F Callback;
 };
 
-template <typename F> ScopeExit<F> MakeScopeExit(F Callback)
+template <typename F>
+ScopeExit<F> MakeScopeExit(F Callback)
 {
     return ScopeExit<F>(std::move(Callback));
 }

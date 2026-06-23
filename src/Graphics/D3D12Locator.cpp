@@ -37,12 +37,14 @@ LocateStatus LocateD3D12(D3D12Methods& Out)
     IDXGIFactory* Factory;
     HRESULT       HResult = CreateDXGIFactoryFn(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&Factory));
     if (HResult != S_OK) return LocateStatus::D3D12CreateDXGIFactoryFailed;
-    auto FactoryGuard = detail::MakeScopeExit([&]() { Factory->Release(); });
+    auto FactoryGuard = detail::MakeScopeExit([&]()
+                                              { Factory->Release(); });
 
     IDXGIAdapter* Adapter;
     HResult = Factory->EnumAdapters(0, &Adapter);
     if (HResult != S_OK) return LocateStatus::D3D12EnumAdaptersFailed;
-    auto AdapterGuard = detail::MakeScopeExit([&]() { Adapter->Release(); });
+    auto AdapterGuard = detail::MakeScopeExit([&]()
+                                              { Adapter->Release(); });
 
     auto D3D12CreateDeviceFn = reinterpret_cast<D3D12CreateDevice_t>(GetProcAddress(D3D12Module, "D3D12CreateDevice"));
     if (!D3D12CreateDeviceFn) return LocateStatus::MethodNotFound;
@@ -51,7 +53,8 @@ LocateStatus LocateD3D12(D3D12Methods& Out)
     HResult =
         D3D12CreateDeviceFn(Adapter, D3D_FEATURE_LEVEL_11_0, __uuidof(ID3D12Device), reinterpret_cast<void**>(&Device));
     if (HResult != S_OK) return LocateStatus::D3D12CreateDeviceFailed;
-    auto DeviceGuard = detail::MakeScopeExit([&]() { Device->Release(); });
+    auto DeviceGuard = detail::MakeScopeExit([&]()
+                                             { Device->Release(); });
 
     D3D12_COMMAND_QUEUE_DESC CommandQueueDesc{};
     CommandQueueDesc.Type  = D3D12_COMMAND_LIST_TYPE_DIRECT;
@@ -61,13 +64,15 @@ LocateStatus LocateD3D12(D3D12Methods& Out)
     HResult = Device->CreateCommandQueue(
         &CommandQueueDesc, __uuidof(ID3D12CommandQueue), reinterpret_cast<void**>(&CommandQueue));
     if (HResult != S_OK) return LocateStatus::D3D12CreateCommandQueueFailed;
-    auto CommandQueueGuard = detail::MakeScopeExit([&]() { CommandQueue->Release(); });
+    auto CommandQueueGuard = detail::MakeScopeExit([&]()
+                                                   { CommandQueue->Release(); });
 
     ID3D12CommandAllocator* CommandAllocator;
     HResult = Device->CreateCommandAllocator(
         D3D12_COMMAND_LIST_TYPE_DIRECT, __uuidof(ID3D12CommandAllocator), reinterpret_cast<void**>(&CommandAllocator));
     if (HResult != S_OK) return LocateStatus::D3D12CreateCommandAllocatorFailed;
-    auto CommandAllocatorGuard = detail::MakeScopeExit([&]() { CommandAllocator->Release(); });
+    auto CommandAllocatorGuard = detail::MakeScopeExit([&]()
+                                                       { CommandAllocator->Release(); });
 
     ID3D12GraphicsCommandList* CommandList;
     HResult = Device->CreateCommandList(0,
@@ -77,11 +82,13 @@ LocateStatus LocateD3D12(D3D12Methods& Out)
                                         __uuidof(ID3D12GraphicsCommandList),
                                         reinterpret_cast<void**>(&CommandList));
     if (HResult != S_OK) return LocateStatus::D3D12CreateCommandListFailed;
-    auto CommandListGuard = detail::MakeScopeExit([&]() { CommandList->Release(); });
+    auto CommandListGuard = detail::MakeScopeExit([&]()
+                                                  { CommandList->Release(); });
 
     detail::DummyWin32Window Window{};
     detail::CreateDummyWin32Window(Window);
-    auto WindowGuard = detail::MakeScopeExit([&]() { detail::DestroyDummyWin32Window(Window); });
+    auto WindowGuard = detail::MakeScopeExit([&]()
+                                             { detail::DestroyDummyWin32Window(Window); });
 
     DXGI_SWAP_CHAIN_DESC SwapChainDesc{};
     SwapChainDesc.BufferDesc.Width                   = 100;
@@ -100,7 +107,8 @@ LocateStatus LocateD3D12(D3D12Methods& Out)
     IDXGISwapChain* SwapChain;
     HResult = Factory->CreateSwapChain(CommandQueue, &SwapChainDesc, &SwapChain);
     if (HResult != S_OK) return LocateStatus::D3D12CreateSwapChainFailed;
-    auto SwapChainGuard = detail::MakeScopeExit([&]() { SwapChain->Release(); });
+    auto SwapChainGuard = detail::MakeScopeExit([&]()
+                                                { SwapChain->Release(); });
 
     for (auto VTable = *reinterpret_cast<void***>(Device); VTable; VTable++)
     {

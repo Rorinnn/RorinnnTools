@@ -6,7 +6,6 @@ module;
 #include <d3dcompiler.h>
 #include <imgui.h>
 
-
 module RorinnnTools;
 import std;
 
@@ -73,7 +72,8 @@ float4 PsMain(VsOut Input) : SV_TARGET
 }
 )";
 
-template <typename T> static void ReleaseObject(T*& Object)
+template <typename T>
+static void ReleaseObject(T*& Object)
 {
     if (Object)
     {
