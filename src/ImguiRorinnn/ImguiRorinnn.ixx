@@ -339,13 +339,14 @@ const char* ToIconString(Icon Value);
 bool           LoadFonts(float TextSize = 16.0f, float IconSize = 15.0f);
 const FontSet& Fonts();
 
-bool CreateDx11TextureFromMemory(ID3D11Device* Device, const void* Data, std::size_t Size, ImageTexture& Texture);
-bool CreateDx11TextureFromFile(ID3D11Device* Device, const wchar_t* Path, ImageTexture& Texture);
-void DestroyDx11Texture(ImageTexture& Texture);
-void Image(const ImageTexture& Texture,
-           const ImVec2&       Size,
-           const ImVec4&       Tint   = ImVec4(1.0f, 1.0f, 1.0f, 1.0f),
-           const ImVec4&       Border = ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+bool   CreateDx11TextureFromMemory(ID3D11Device* Device, const void* Data, std::size_t Size, ImageTexture& Texture);
+bool   CreateDx11TextureFromFile(ID3D11Device* Device, const wchar_t* Path, ImageTexture& Texture);
+void   DestroyDx11Texture(ImageTexture& Texture);
+ImVec2 FitImageSize(int ImageWidth, int ImageHeight, const ImVec2& Bounds);
+void   Image(const ImageTexture& Texture,
+             const ImVec2&       Size,
+             const ImVec4&       Tint   = ImVec4(1.0f, 1.0f, 1.0f, 1.0f),
+             const ImVec4&       Border = ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 
 void   AddVerticalSpace(float Height);
 void   SameLineRight(float ItemWidth);

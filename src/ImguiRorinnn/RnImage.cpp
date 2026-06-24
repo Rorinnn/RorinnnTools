@@ -159,6 +159,19 @@ void DestroyDx11Texture(ImageTexture& Texture)
     Texture = {};
 }
 
+ImVec2 FitImageSize(int ImageWidth, int ImageHeight, const ImVec2& Bounds)
+{
+    if (ImageWidth <= 0 || ImageHeight <= 0)
+        return ImVec2(1.0f, 1.0f);
+
+    const float MaxWidth  = (std::max)(1.0f, Bounds.x);
+    const float MaxHeight = (std::max)(1.0f, Bounds.y);
+    const float Scale     = (std::min)(MaxWidth / static_cast<float>(ImageWidth),
+                                   MaxHeight / static_cast<float>(ImageHeight));
+    return ImVec2((std::max)(1.0f, static_cast<float>(ImageWidth) * Scale),
+                  (std::max)(1.0f, static_cast<float>(ImageHeight) * Scale));
+}
+
 void Image(const ImageTexture& Texture, const ImVec2& Size, const ImVec4& Tint, const ImVec4& Border)
 {
     if (!Texture.View)
