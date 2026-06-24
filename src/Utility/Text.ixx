@@ -1,5 +1,7 @@
 module;
 
+#include <Windows.h>
+
 export module RorinnnTools:Text;
 import std;
 
@@ -30,7 +32,7 @@ inline bool Equals(TextSlice Slice, std::string_view Text)
     return Slice.View() == Text;
 }
 
-inline bool ContainsInsensitive(std::string_view Text, std::string_view Pattern)
+inline bool ContainsAsciiIgnoreCase(std::string_view Text, std::string_view Pattern)
 {
     if (Pattern.empty())
         return true;
@@ -48,6 +50,62 @@ inline bool ContainsInsensitive(std::string_view Text, std::string_view Pattern)
             return true;
     }
     return false;
+}
+
+inline std::string_view TrimView(std::string_view Text)
+{
+    auto IsSpace = [](unsigned char Ch)
+    { return std::isspace(Ch) != 0; };
+
+    while (!Text.empty() && IsSpace(static_cast<unsigned char>(Text.front())))
+        Text.remove_prefix(1);
+    while (!Text.empty() && IsSpace(static_cast<unsigned char>(Text.back())))
+        Text.remove_suffix(1);
+    return Text;
+}
+
+inline std::string Trim(std::string_view Text)
+{
+    const std::string_view Trimmed = TrimView(Text);
+    return std::string(Trimmed.data(), Trimmed.size());
+}
+
+inline bool EndsWithNewline(std::string_view Text)
+{
+    return Text.empty() || Text.back() == '\n' || Text.back() == '\r';
+}
+
+inline std::string ToUtf8(std::wstring_view Text)
+{
+    if (Text.empty())
+        return {};
+
+    const int Size = WideCharToMultiByte(CP_UTF8,
+                                         0,
+                                         Text.data(),
+                                         static_cast<int>(Text.size()),
+                                         nullptr,
+                                         0,
+                                         nullptr,
+                                         nullptr);
+    if (Size <= 0)
+        return {};
+
+    std::string Result(static_cast<std::size_t>(Size), '\0');
+    WideCharToMultiByte(CP_UTF8,
+                        0,
+                        Text.data(),
+                        static_cast<int>(Text.size()),
+                        Result.data(),
+                        Size,
+                        nullptr,
+                        nullptr);
+    return Result;
+}
+
+inline std::string ToUtf8(const wchar_t* PText)
+{
+    return PText ? ToUtf8(std::wstring_view(PText)) : std::string();
 }
 
 inline void SplitLines(std::string_view Text, std::vector<TextSlice>& Lines, bool KeepEmpty = false)

@@ -40,6 +40,10 @@ struct MemoryRange
 bool           ReadBytes(std::uintptr_t Ptr, void* PBuffer, std::size_t Size);
 bool           WriteBytes(std::uintptr_t Ptr, const void* PBuffer, std::size_t Size);
 bool           ReadPtr(std::uintptr_t Ptr, std::uintptr_t& Value);
+bool           TryReadString(std::uintptr_t Ptr, std::size_t MaxLength, std::string& Value);
+std::string    ReadString(std::uintptr_t Ptr, std::size_t MaxLength);
+bool           TryReadCString(std::uintptr_t Ptr, std::string& Value, std::size_t ChunkSize = 256, std::size_t MaxLength = 64 * 1024);
+std::string    ReadCString(std::uintptr_t Ptr, std::size_t ChunkSize = 256, std::size_t MaxLength = 64 * 1024);
 bool           ResolvePointerChain(std::uintptr_t Base, std::span<const std::ptrdiff_t> Offsets, std::uintptr_t& Address);
 bool           GetModuleInfo(const wchar_t* ModuleName, ModuleInfo& Info);
 bool           GetModuleInfo(std::uintptr_t ModuleBase, ModuleInfo& Info);
@@ -56,7 +60,7 @@ bool ReadValue(std::uintptr_t Ptr, T& Value);
 template <typename T>
 bool WriteValue(std::uintptr_t Ptr, const T& Value);
 
-namespace StructMarshaller
+namespace StructBytes
 {
 template <typename T>
 bool FromBytes(std::span<const std::uint8_t> Bytes, T& Value)
@@ -86,7 +90,7 @@ bool Write(std::uintptr_t Ptr, const T& Value)
 {
     return WriteValue(Ptr, Value);
 }
-} // namespace StructMarshaller
+} // namespace StructBytes
 
 namespace MemoryHelper
 {
@@ -156,6 +160,26 @@ inline bool TryWriteRaw(std::uintptr_t Ptr, std::span<const std::uint8_t> Bytes)
         return true;
     return WriteBytes(Ptr, Bytes.data(), Bytes.size());
 }
+
+inline bool TryReadString(std::uintptr_t Ptr, std::size_t MaxLength, std::string& Value)
+{
+    return RorinnnTools::Memory::TryReadString(Ptr, MaxLength, Value);
+}
+
+inline std::string ReadString(std::uintptr_t Ptr, std::size_t MaxLength)
+{
+    return RorinnnTools::Memory::ReadString(Ptr, MaxLength);
+}
+
+inline bool TryReadCString(std::uintptr_t Ptr, std::string& Value, std::size_t ChunkSize = 256, std::size_t MaxLength = 64 * 1024)
+{
+    return RorinnnTools::Memory::TryReadCString(Ptr, Value, ChunkSize, MaxLength);
+}
+
+inline std::string ReadCString(std::uintptr_t Ptr, std::size_t ChunkSize = 256, std::size_t MaxLength = 64 * 1024)
+{
+    return RorinnnTools::Memory::ReadCString(Ptr, ChunkSize, MaxLength);
+}
 } // namespace MemoryHelper
 
 class SigScanner
@@ -180,15 +204,15 @@ class SigScanner
     std::vector<std::uintptr_t> ScanRangeAll(MemoryRange Range, std::string_view Pattern) const;
     std::uintptr_t              ScanModule(std::string_view Pattern) const;
     std::uintptr_t              ScanText(std::string_view Pattern) const;
-    std::uintptr_t              ScanTextTarget(std::string_view Pattern) const;
+    std::uintptr_t              ScanTextBranchTarget(std::string_view Pattern) const;
     std::uintptr_t              ScanData(std::string_view Pattern) const;
     std::uintptr_t              ScanRData(std::string_view Pattern) const;
     std::vector<std::uintptr_t> ScanAllText(std::string_view Pattern) const;
 
-    bool           TryGetStaticAddressFromSig(std::string_view Pattern, std::uintptr_t& Address, std::size_t InstructionSize = 7, std::size_t DisplacementOffset = 3) const;
-    std::uintptr_t GetStaticAddressFromSig(std::string_view Pattern, std::size_t InstructionSize = 7, std::size_t DisplacementOffset = 3) const;
-    bool           TryGetCallTargetFromSig(std::string_view Pattern, std::uintptr_t& Address) const;
-    std::uintptr_t GetCallTargetFromSig(std::string_view Pattern) const;
+    bool           TryGetStaticAddress(std::string_view Pattern, std::uintptr_t& Address, std::size_t InstructionSize = 7, std::size_t DisplacementOffset = 3) const;
+    std::uintptr_t GetStaticAddress(std::string_view Pattern, std::size_t InstructionSize = 7, std::size_t DisplacementOffset = 3) const;
+    bool           TryGetCallTarget(std::string_view Pattern, std::uintptr_t& Address) const;
+    std::uintptr_t GetCallTarget(std::string_view Pattern) const;
 
   private:
     ModuleInfo                Module     = {};
@@ -231,11 +255,11 @@ class MemoryPatch
 };
 
 template <typename T>
-class PointerValuePatch
+class MemoryValuePatch
 {
   public:
-    PointerValuePatch() = default;
-    explicit PointerValuePatch(std::uintptr_t PointerAddress) : PointerAddress(PointerAddress) {}
+    MemoryValuePatch() = default;
+    explicit MemoryValuePatch(std::uintptr_t PointerAddress) : PointerAddress(PointerAddress) {}
 
     bool Apply()
     {

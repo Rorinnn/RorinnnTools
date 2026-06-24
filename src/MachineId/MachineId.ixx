@@ -6,6 +6,6 @@ import std;
 export namespace RorinnnTools
 {
 
-bool BuildMachineCode(std::string& MachineCode);
+bool BuildMachineId(std::string& MachineId);
 
 } // namespace RorinnnTools

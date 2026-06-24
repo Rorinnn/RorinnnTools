@@ -34,9 +34,9 @@ LocateStatus LocateD3D9(D3D9Methods& Out)
                                                { Direct3D->Release(); });
 
     detail::DummyWin32Window Window{};
-    detail::CreateDummyWin32Window(Window);
+    detail::CreateDummyWindow(Window);
     auto WindowGuard = detail::MakeScopeExit([&]()
-                                             { detail::DestroyDummyWin32Window(Window); });
+                                             { detail::DestroyDummyWindow(Window); });
 
     D3DPRESENT_PARAMETERS PresentParameters{};
     PresentParameters.Windowed      = TRUE;

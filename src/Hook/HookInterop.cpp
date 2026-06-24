@@ -113,7 +113,7 @@ void* ReplaceFunctionPointer(void** Slot, void* RedirectAddress)
     return ReplaceSlot(Slot, RedirectAddress);
 }
 
-void* ReplaceVirtualTable(void* Instance, int Offset, void* RedirectAddress)
+void* ReplaceVTableSlot(void* Instance, int Offset, void* RedirectAddress)
 {
     void** Table = *reinterpret_cast<void***>(Instance);
     return ReplaceFunctionPointer(&Table[Offset], RedirectAddress);
@@ -170,7 +170,7 @@ HookResult HookFromFunctionPointer(int Token, void** FunctionPointer, void* Redi
     return HookFromAddress(Token, *FunctionPointer, RedirectAddress);
 }
 
-HookResult HookFromVirtualTableAddress(int Token, void* Instance, int Offset, void* RedirectAddress)
+HookResult HookFromVTable(int Token, void* Instance, int Offset, void* RedirectAddress)
 {
     if (!Instance)
         return MakeHookResult(VehHookStatus::InvalidArgument, nullptr);

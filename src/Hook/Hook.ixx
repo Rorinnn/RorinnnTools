@@ -62,7 +62,7 @@ VehHookStatus RemoveAllVehHooks();
 VehHookStatus RefreshHardwareVehHooks();
 std::size_t   GetVehHookCount();
 
-const char* GetVehHookStatusName(VehHookStatus Status);
+const char* GetVehHookStatusText(VehHookStatus Status);
 
 struct HookResult
 {
@@ -79,8 +79,8 @@ HookResult HookFromImport(const wchar_t* ImportingModuleName, const char* Import
 HookResult HookFromImportAddress(int Token, const wchar_t* ImportingModuleName, const char* ImportedModuleName, const char* SymbolName, void* RedirectAddress);
 HookResult HookFromFunctionPointer(int Token, void** FunctionPointer, void* RedirectAddress);
 void*      ReplaceFunctionPointer(void** Slot, void* RedirectAddress);
-void*      ReplaceVirtualTable(void* Instance, int Offset, void* RedirectAddress);
+void*      ReplaceVTableSlot(void* Instance, int Offset, void* RedirectAddress);
 
-HookResult HookFromVirtualTableAddress(int Token, void* Instance, int Offset, void* RedirectAddress);
+HookResult HookFromVTable(int Token, void* Instance, int Offset, void* RedirectAddress);
 
 } // namespace RorinnnTools::Hook

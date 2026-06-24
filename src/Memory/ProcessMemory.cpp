@@ -36,6 +36,66 @@ bool ReadPtr(std::uintptr_t Ptr, std::uintptr_t& Value)
     return ReadValue(Ptr, Value);
 }
 
+bool TryReadString(std::uintptr_t Ptr, std::size_t MaxLength, std::string& Value)
+{
+    Value.clear();
+    if (!Ptr)
+        return false;
+    if (!MaxLength)
+        return true;
+
+    std::string Buffer(MaxLength, '\0');
+    if (!ReadBytes(Ptr, Buffer.data(), Buffer.size()))
+        return false;
+
+    const std::size_t Length = std::char_traits<char>::length(Buffer.c_str());
+    Value.assign(Buffer.data(), Length);
+    return true;
+}
+
+std::string ReadString(std::uintptr_t Ptr, std::size_t MaxLength)
+{
+    std::string Value;
+    TryReadString(Ptr, MaxLength, Value);
+    return Value;
+}
+
+bool TryReadCString(std::uintptr_t Ptr, std::string& Value, std::size_t ChunkSize, std::size_t MaxLength)
+{
+    Value.clear();
+    if (!Ptr)
+        return false;
+    if (!MaxLength)
+        return true;
+    if (!ChunkSize)
+        ChunkSize = 256;
+
+    std::vector<char> Buffer(ChunkSize);
+    std::uintptr_t    Current = Ptr;
+    while (Value.size() < MaxLength)
+    {
+        const std::size_t Remaining = MaxLength - Value.size();
+        const std::size_t ToRead    = std::min(ChunkSize, Remaining);
+        if (!ReadBytes(Current, Buffer.data(), ToRead))
+            return false;
+
+        const auto End = std::find(Buffer.begin(), Buffer.begin() + static_cast<std::ptrdiff_t>(ToRead), '\0');
+        Value.append(Buffer.data(), static_cast<std::size_t>(End - Buffer.begin()));
+        if (End != Buffer.begin() + static_cast<std::ptrdiff_t>(ToRead))
+            return true;
+        Current += ToRead;
+    }
+
+    return false;
+}
+
+std::string ReadCString(std::uintptr_t Ptr, std::size_t ChunkSize, std::size_t MaxLength)
+{
+    std::string Value;
+    TryReadCString(Ptr, Value, ChunkSize, MaxLength);
+    return Value;
+}
+
 bool ResolvePointerChain(std::uintptr_t Base, std::span<const std::ptrdiff_t> Offsets, std::uintptr_t& Address)
 {
     if (!Base)

@@ -9,7 +9,7 @@ import std;
 
 namespace RorinnnTools::Graphics::detail
 {
-void CreateDummyWin32Window(DummyWin32Window& Window)
+void CreateDummyWindow(DummyWin32Window& Window)
 {
     Window.WindowClass               = {};
     Window.WindowClass.cbSize        = sizeof(Window.WindowClass);
@@ -33,7 +33,7 @@ void CreateDummyWin32Window(DummyWin32Window& Window)
                                           nullptr);
 }
 
-void DestroyDummyWin32Window(DummyWin32Window& Window)
+void DestroyDummyWindow(DummyWin32Window& Window)
 {
     DestroyWindow(Window.WindowHandle);
     UnregisterClassA(Window.WindowClass.lpszClassName, Window.WindowClass.hInstance);

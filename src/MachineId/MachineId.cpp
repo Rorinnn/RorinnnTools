@@ -95,39 +95,16 @@ class ComRelease
     IUnknown* Value = nullptr;
 };
 
-static std::string Trim(std::string Value)
-{
-    auto IsSpace = [](unsigned char Char)
-    { return std::isspace(Char) != 0; };
-    Value.erase(Value.begin(), std::find_if_not(Value.begin(), Value.end(), IsSpace));
-    Value.erase(std::find_if_not(Value.rbegin(), Value.rend(), IsSpace).base(), Value.end());
-    return Value;
-}
-
-static std::string ToUtf8(const wchar_t* Text)
-{
-    if (!Text || Text[0] == L'\0')
-        return {};
-
-    int Size = WideCharToMultiByte(CP_UTF8, 0, Text, -1, nullptr, 0, nullptr, nullptr);
-    if (Size <= 1)
-        return {};
-
-    std::string Result(static_cast<std::size_t>(Size - 1), '\0');
-    WideCharToMultiByte(CP_UTF8, 0, Text, -1, Result.data(), Size, nullptr, nullptr);
-    return Result;
-}
-
 static std::string VariantToString(const VARIANT& Value)
 {
     if (Value.vt == VT_BSTR)
-        return Trim(ToUtf8(Value.bstrVal));
+        return Text::Trim(Text::ToUtf8(Value.bstrVal));
 
     VARIANT TextValue{};
     VariantInit(&TextValue);
     if (SUCCEEDED(VariantChangeType(&TextValue, const_cast<VARIANT*>(&Value), 0, VT_BSTR)))
     {
-        std::string Result = Trim(ToUtf8(TextValue.bstrVal));
+        std::string Result = Text::Trim(Text::ToUtf8(TextValue.bstrVal));
         VariantClear(&TextValue);
         return Result;
     }
@@ -151,7 +128,7 @@ static std::uint64_t VariantToUInt64(const VARIANT& Value)
 
 static std::string NormalizeSerial(std::string Value)
 {
-    Value = Trim(std::move(Value));
+    Value = Text::Trim(Value);
     std::replace(Value.begin(), Value.end(), ' ', '_');
     std::transform(Value.begin(),
                    Value.end(),
@@ -371,9 +348,9 @@ static bool BuildSha256Base64Url(std::string_view Text, std::string& Result)
 
 } // namespace
 
-bool BuildMachineCode(std::string& MachineCode)
+bool BuildMachineId(std::string& MachineId)
 {
-    MachineCode.clear();
+    MachineId.clear();
 
     ComScope Com;
     if (!Com.IsReady())
@@ -399,7 +376,7 @@ bool BuildMachineCode(std::string& MachineCode)
     if (Material.empty() || Material == "UnknownUnknown|Count:0|TotalSize:0")
         return false;
 
-    return BuildSha256Base64Url(Material, MachineCode);
+    return BuildSha256Base64Url(Material, MachineId);
 }
 
 } // namespace RorinnnTools

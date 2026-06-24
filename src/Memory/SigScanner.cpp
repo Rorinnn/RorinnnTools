@@ -163,7 +163,7 @@ std::uintptr_t SigScanner::ScanText(std::string_view Pattern) const
     return ScanRange(Text, Pattern);
 }
 
-std::uintptr_t SigScanner::ScanTextTarget(std::string_view Pattern) const
+std::uintptr_t SigScanner::ScanTextBranchTarget(std::string_view Pattern) const
 {
     const std::uintptr_t Found = ScanText(Pattern);
     if (!Found)
@@ -188,7 +188,7 @@ std::vector<std::uintptr_t> SigScanner::ScanAllText(std::string_view Pattern) co
     return ScanRangeAll(Text, Pattern);
 }
 
-bool SigScanner::TryGetStaticAddressFromSig(std::string_view Pattern, std::uintptr_t& Address, std::size_t InstructionSize, std::size_t DisplacementOffset) const
+bool SigScanner::TryGetStaticAddress(std::string_view Pattern, std::uintptr_t& Address, std::size_t InstructionSize, std::size_t DisplacementOffset) const
 {
     const std::uintptr_t Found = ScanText(Pattern);
     if (!Found)
@@ -198,14 +198,14 @@ bool SigScanner::TryGetStaticAddressFromSig(std::string_view Pattern, std::uintp
     return Address != 0;
 }
 
-std::uintptr_t SigScanner::GetStaticAddressFromSig(std::string_view Pattern, std::size_t InstructionSize, std::size_t DisplacementOffset) const
+std::uintptr_t SigScanner::GetStaticAddress(std::string_view Pattern, std::size_t InstructionSize, std::size_t DisplacementOffset) const
 {
     std::uintptr_t Address = 0;
-    TryGetStaticAddressFromSig(Pattern, Address, InstructionSize, DisplacementOffset);
+    TryGetStaticAddress(Pattern, Address, InstructionSize, DisplacementOffset);
     return Address;
 }
 
-bool SigScanner::TryGetCallTargetFromSig(std::string_view Pattern, std::uintptr_t& Address) const
+bool SigScanner::TryGetCallTarget(std::string_view Pattern, std::uintptr_t& Address) const
 {
     const std::uintptr_t Found = ScanText(Pattern);
     if (!Found || !IsRelativeBranch(TranslateToScanAddress(Found)))
@@ -215,10 +215,10 @@ bool SigScanner::TryGetCallTargetFromSig(std::string_view Pattern, std::uintptr_
     return Address != 0;
 }
 
-std::uintptr_t SigScanner::GetCallTargetFromSig(std::string_view Pattern) const
+std::uintptr_t SigScanner::GetCallTarget(std::string_view Pattern) const
 {
     std::uintptr_t Address = 0;
-    TryGetCallTargetFromSig(Pattern, Address);
+    TryGetCallTarget(Pattern, Address);
     return Address;
 }
 

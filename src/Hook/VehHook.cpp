@@ -717,7 +717,7 @@ std::size_t GetVehHookCount()
     return HookRecords.size();
 }
 
-const char* GetVehHookStatusName(VehHookStatus Status)
+const char* GetVehHookStatusText(VehHookStatus Status)
 {
     switch (Status)
     {

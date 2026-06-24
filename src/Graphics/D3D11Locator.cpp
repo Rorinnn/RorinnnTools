@@ -65,9 +65,9 @@ LocateStatus LocateD3D11(D3D11Methods& Out)
         return LocateStatus::MethodNotFound;
 
     detail::DummyWin32Window Window{};
-    detail::CreateDummyWin32Window(Window);
+    detail::CreateDummyWindow(Window);
     auto WindowGuard = detail::MakeScopeExit([&]()
-                                             { detail::DestroyDummyWin32Window(Window); });
+                                             { detail::DestroyDummyWindow(Window); });
 
     DXGI_SWAP_CHAIN_DESC SwapChainDesc{};
     SwapChainDesc.BufferDesc.Width                   = 100;

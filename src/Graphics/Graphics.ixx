@@ -14,8 +14,8 @@ struct DummyWin32Window
     HWND        WindowHandle = nullptr;
 };
 
-void CreateDummyWin32Window(DummyWin32Window& Window);
-void DestroyDummyWin32Window(DummyWin32Window& Window);
+void CreateDummyWindow(DummyWin32Window& Window);
+void DestroyDummyWindow(DummyWin32Window& Window);
 
 template <typename F>
 class ScopeExit
