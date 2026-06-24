@@ -1,4 +1,4 @@
-// ProcessMemory.cpp — 当前进程内存安全读取工具
+// ProcessMemory.cpp — 当前进程内存读写工具
 
 module;
 
@@ -6,6 +6,7 @@ module;
 #include <psapi.h>
 
 module RorinnnTools;
+import std;
 
 namespace RorinnnTools::Memory
 {
@@ -60,8 +61,51 @@ bool ReadBytes(std::uintptr_t Ptr, void* PBuffer, std::size_t Size)
     }
 }
 
+bool WriteBytes(std::uintptr_t Ptr, const void* PBuffer, std::size_t Size)
+{
+    if (!Ptr || !PBuffer || Size == 0)
+        return false;
+
+    DWORD OldProtect = 0;
+    if (!VirtualProtect(reinterpret_cast<void*>(Ptr), Size, PAGE_EXECUTE_READWRITE, &OldProtect))
+        return false;
+
+    bool Written = false;
+    __try
+    {
+        std::memcpy(reinterpret_cast<void*>(Ptr), PBuffer, Size);
+        FlushInstructionCache(GetCurrentProcess(), reinterpret_cast<void*>(Ptr), Size);
+        Written = true;
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER)
+    {
+        Written = false;
+    }
+
+    DWORD Ignored = 0;
+    VirtualProtect(reinterpret_cast<void*>(Ptr), Size, OldProtect, &Ignored);
+    return Written;
+}
+
 bool ReadPtr(std::uintptr_t Ptr, std::uintptr_t& Value)
 {
     return ReadValue(Ptr, Value) && IsReadablePtr(Value);
+}
+
+bool ResolvePointerChain(std::uintptr_t Base, std::span<const std::ptrdiff_t> Offsets, std::uintptr_t& Address)
+{
+    if (!Base)
+        return false;
+
+    std::uintptr_t Current = Base;
+    for (std::size_t Index = 0; Index < Offsets.size(); Index++)
+    {
+        Current += Offsets[Index];
+        if (Index + 1 < Offsets.size() && !ReadPtr(Current, Current))
+            return false;
+    }
+
+    Address = Current;
+    return true;
 }
 } // namespace RorinnnTools::Memory
