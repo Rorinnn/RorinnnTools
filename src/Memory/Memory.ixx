@@ -39,8 +39,6 @@ struct MemoryRange
 
 bool           ReadBytes(std::uintptr_t Ptr, void* PBuffer, std::size_t Size);
 bool           WriteBytes(std::uintptr_t Ptr, const void* PBuffer, std::size_t Size);
-bool           IsReadablePtr(std::uintptr_t Ptr);
-bool           IsReadableRange(std::uintptr_t Ptr, std::size_t Size);
 bool           ReadPtr(std::uintptr_t Ptr, std::uintptr_t& Value);
 bool           ResolvePointerChain(std::uintptr_t Base, std::span<const std::ptrdiff_t> Offsets, std::uintptr_t& Address);
 bool           GetModuleInfo(const wchar_t* ModuleName, ModuleInfo& Info);
@@ -89,6 +87,76 @@ bool Write(std::uintptr_t Ptr, const T& Value)
     return WriteValue(Ptr, Value);
 }
 } // namespace StructMarshaller
+
+namespace MemoryHelper
+{
+template <typename T>
+T& Cast(std::uintptr_t Ptr)
+{
+    return *reinterpret_cast<T*>(Ptr);
+}
+
+template <typename T>
+std::span<T> Cast(std::uintptr_t Ptr, std::size_t Count)
+{
+    return {reinterpret_cast<T*>(Ptr), Count};
+}
+
+template <typename T>
+T Read(std::uintptr_t Ptr)
+{
+    T Value = {};
+    std::memcpy(&Value, reinterpret_cast<const void*>(Ptr), sizeof(T));
+    return Value;
+}
+
+inline std::vector<std::uint8_t> ReadRaw(std::uintptr_t Ptr, std::size_t Size)
+{
+    std::vector<std::uint8_t> Bytes(Size);
+    if (Size)
+        std::memcpy(Bytes.data(), reinterpret_cast<const void*>(Ptr), Size);
+    return Bytes;
+}
+
+template <typename T>
+void Write(std::uintptr_t Ptr, const T& Value)
+{
+    std::memcpy(reinterpret_cast<void*>(Ptr), &Value, sizeof(T));
+}
+
+inline void WriteRaw(std::uintptr_t Ptr, std::span<const std::uint8_t> Bytes)
+{
+    if (!Bytes.empty())
+        std::memcpy(reinterpret_cast<void*>(Ptr), Bytes.data(), Bytes.size());
+}
+
+template <typename T>
+bool TryRead(std::uintptr_t Ptr, T& Value)
+{
+    return ReadBytes(Ptr, &Value, sizeof(T));
+}
+
+inline bool TryReadRaw(std::uintptr_t Ptr, std::size_t Size, std::vector<std::uint8_t>& Bytes)
+{
+    Bytes.assign(Size, 0);
+    if (!Size)
+        return true;
+    return ReadBytes(Ptr, Bytes.data(), Bytes.size());
+}
+
+template <typename T>
+bool TryWrite(std::uintptr_t Ptr, const T& Value)
+{
+    return WriteBytes(Ptr, &Value, sizeof(T));
+}
+
+inline bool TryWriteRaw(std::uintptr_t Ptr, std::span<const std::uint8_t> Bytes)
+{
+    if (Bytes.empty())
+        return true;
+    return WriteBytes(Ptr, Bytes.data(), Bytes.size());
+}
+} // namespace MemoryHelper
 
 class SigScanner
 {
