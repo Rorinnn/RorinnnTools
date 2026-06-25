@@ -78,8 +78,6 @@ class FunctionPointerHook
     FunctionPointerHook()                                      = default;
     FunctionPointerHook(const FunctionPointerHook&)            = delete;
     FunctionPointerHook& operator=(const FunctionPointerHook&) = delete;
-    FunctionPointerHook(FunctionPointerHook&& Other) noexcept;
-    FunctionPointerHook& operator=(FunctionPointerHook&& Other) noexcept;
     ~FunctionPointerHook();
 
     bool   Install(void** Slot, void* RedirectAddress);
@@ -98,12 +96,9 @@ class FunctionPointerHook
 class VTableHook
 {
   public:
-    VTableHook()                                       = default;
-    VTableHook(const VTableHook&)                      = delete;
-    VTableHook& operator=(const VTableHook&)           = delete;
-    VTableHook(VTableHook&& Other) noexcept            = default;
-    VTableHook& operator=(VTableHook&& Other) noexcept = default;
-    ~VTableHook()                                      = default;
+    VTableHook()                             = default;
+    VTableHook(const VTableHook&)            = delete;
+    VTableHook& operator=(const VTableHook&) = delete;
 
     bool   Install(void* Instance, int Offset, void* RedirectAddress);
     bool   Restore();

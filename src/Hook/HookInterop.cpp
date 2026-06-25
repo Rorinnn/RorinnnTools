@@ -136,24 +136,6 @@ HookResult HookFromAddress(int Token, void* TargetAddress, void* RedirectAddress
     return MakeHookResult(Status, TargetAddress);
 }
 
-FunctionPointerHook::FunctionPointerHook(FunctionPointerHook&& Other) noexcept
-{
-    *this = std::move(Other);
-}
-
-FunctionPointerHook& FunctionPointerHook::operator=(FunctionPointerHook&& Other) noexcept
-{
-    if (this == &Other)
-        return *this;
-
-    Restore();
-
-    Slot     = Other.Slot;
-    Original = Other.Original;
-    Other.Reset();
-    return *this;
-}
-
 FunctionPointerHook::~FunctionPointerHook()
 {
     Restore();
