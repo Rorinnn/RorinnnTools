@@ -939,13 +939,13 @@ bool BeginTable(const char* Id, int ColumnCount, ImGuiTableFlags Flags, const Im
     const SizeTokens&  S          = Sizes();
     int                ColorCount = 0;
     int                VarCount   = 0;
-    ImGui::PushStyleColor(ImGuiCol_TableHeaderBg, Color::Transparent);
+    ImGui::PushStyleColor(ImGuiCol_TableHeaderBg, KnownColor::Transparent);
     ColorCount++;
-    ImGui::PushStyleColor(ImGuiCol_HeaderHovered, Color::Transparent);
+    ImGui::PushStyleColor(ImGuiCol_HeaderHovered, KnownColor::Transparent);
     ColorCount++;
-    ImGui::PushStyleColor(ImGuiCol_HeaderActive, Color::Transparent);
+    ImGui::PushStyleColor(ImGuiCol_HeaderActive, KnownColor::Transparent);
     ColorCount++;
-    ImGui::PushStyleColor(ImGuiCol_TableBorderStrong, Color::Transparent);
+    ImGui::PushStyleColor(ImGuiCol_TableBorderStrong, KnownColor::Transparent);
     ColorCount++;
     ImGui::PushStyleColor(ImGuiCol_TableBorderLight, WithAlpha(C.Border, 0.24f));
     ColorCount++;

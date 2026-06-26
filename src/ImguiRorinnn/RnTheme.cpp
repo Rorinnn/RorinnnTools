@@ -96,7 +96,7 @@ static void ApplyStyleFromTheme(const Theme& ThemeValue)
     Colors[ImGuiCol_TableRowBgAlt]        = C.SurfaceHover;
     Colors[ImGuiCol_TextSelectedBg]       = WithAlpha(C.Accent, 0.34f);
     Colors[ImGuiCol_NavHighlight]         = WithAlpha(C.Accent, 0.42f);
-    Colors[ImGuiCol_ModalWindowDimBg]     = WithAlpha(Color::Black, 0.46f);
+    Colors[ImGuiCol_ModalWindowDimBg]     = WithAlpha(KnownColor::Black, 0.46f);
 }
 
 static Theme g_BaseTheme = MakeTheme();
@@ -107,25 +107,23 @@ Theme MakeTheme()
 {
     Theme Result{};
 
-    const ImVec4 AccentValue = Color::SoftWhite;
-
-    Result.Colors.Accent        = AccentValue;
-    Result.Colors.AccentHover   = Blend(AccentValue, Col(1.0f, 1.0f, 1.0f), 0.12f);
-    Result.Colors.AccentActive  = Blend(AccentValue, Col(0.0f, 0.0f, 0.0f), 0.20f);
-    Result.Colors.AccentText    = Col(0.98f, 0.99f, 1.0f);
-    Result.Colors.Success       = Color::Green;
-    Result.Colors.Warning       = Color::Orange;
-    Result.Colors.Danger        = Color::Red;
-    Result.Colors.Background    = WithAlpha(Color::DarkSlate, 0.38f);
-    Result.Colors.Surface       = WithAlpha(Color::SoftWhite, 0.12f);
-    Result.Colors.SurfaceHover  = WithAlpha(Color::White, 0.19f);
-    Result.Colors.SurfaceActive = WithAlpha(Color::White, 0.26f);
-    Result.Colors.Overlay       = WithAlpha(Color::DarkSlate, 0.64f);
-    Result.Colors.Border        = WithAlpha(Color::SoftWhite, 0.13f);
-    Result.Colors.BorderStrong  = WithAlpha(Color::SoftWhite, 0.22f);
-    Result.Colors.Text          = WithAlpha(Color::White, 0.99f);
-    Result.Colors.TextMuted     = WithAlpha(Color::SoftWhite, 0.82f);
-    Result.Colors.TextDisabled  = WithAlpha(Color::LightGray, 0.48f);
+    Result.Colors.Accent        = KnownColor::AliceBlue;
+    Result.Colors.AccentHover   = Blend(KnownColor::AliceBlue, Col(1.0f, 1.0f, 1.0f), 0.12f);
+    Result.Colors.AccentActive  = Blend(KnownColor::AliceBlue, Col(0.0f, 0.0f, 0.0f), 0.20f);
+    Result.Colors.AccentText    = KnownColor::White;
+    Result.Colors.Success       = KnownColor::MediumSeaGreen;
+    Result.Colors.Warning       = KnownColor::Chocolate;
+    Result.Colors.Danger        = KnownColor::IndianRed;
+    Result.Colors.Background    = WithAlpha(KnownColor::Black, 0.38f);
+    Result.Colors.Surface       = WithAlpha(KnownColor::AliceBlue, 0.12f);
+    Result.Colors.SurfaceHover  = WithAlpha(KnownColor::White, 0.19f);
+    Result.Colors.SurfaceActive = WithAlpha(KnownColor::White, 0.26f);
+    Result.Colors.Overlay       = WithAlpha(KnownColor::Black, 0.64f);
+    Result.Colors.Border        = WithAlpha(KnownColor::AliceBlue, 0.13f);
+    Result.Colors.BorderStrong  = WithAlpha(KnownColor::AliceBlue, 0.22f);
+    Result.Colors.Text          = WithAlpha(KnownColor::White, 0.99f);
+    Result.Colors.TextMuted     = WithAlpha(KnownColor::AliceBlue, 0.82f);
+    Result.Colors.TextDisabled  = WithAlpha(KnownColor::Silver, 0.48f);
 
     return Result;
 }
