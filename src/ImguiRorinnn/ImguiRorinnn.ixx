@@ -614,6 +614,7 @@ bool BeginWindow(const char* Name, const WindowOptions& Options = {});
 void EndWindow();
 void BeginManagedWindowFrame();
 bool HasVisibleManagedWindows();
+bool ShouldPreferGameTextInput(HWND Hwnd, UINT Msg, WPARAM WParam);
 void DrawTitleBarCollapseButton(const char* Id              = "RnTitleBarCollapseButton",
                                 const char* CollapseTooltip = "折叠",
                                 const char* RestoreTooltip  = "还原");
