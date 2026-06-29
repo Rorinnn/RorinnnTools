@@ -2,9 +2,9 @@
 
 module;
 
-module RorinnnTools;
+module RnTools;
 
-namespace RorinnnTools::ImguiRorinnn
+namespace RnTools::ImguiRorinnn
 {
 namespace
 {
@@ -70,4 +70,4 @@ const char* ToIconString(Icon Value)
     return IconLiteral(Value);
 }
 
-} // namespace RorinnnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRorinnn

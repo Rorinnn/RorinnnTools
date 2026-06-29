@@ -1,11 +1,11 @@
 module;
 
-export module RorinnnTools:MachineId;
+export module RnTools:MachineId;
 import std;
 
-export namespace RorinnnTools
+export namespace RnTools
 {
 
 bool BuildMachineId(std::string& MachineId);
 
-} // namespace RorinnnTools
+} // namespace RnTools

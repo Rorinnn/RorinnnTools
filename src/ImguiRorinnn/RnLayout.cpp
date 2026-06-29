@@ -4,10 +4,10 @@ module;
 
 #include <imgui_internal.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::ImguiRorinnn
+namespace RnTools::ImguiRorinnn
 {
 namespace
 {
@@ -454,4 +454,4 @@ void EndIndented(float Width)
     ImGui::Unindent(Width);
 }
 
-} // namespace RorinnnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRorinnn

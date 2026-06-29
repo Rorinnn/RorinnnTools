@@ -4,9 +4,9 @@ module;
 
 #include <Windows.h>
 
-module RorinnnTools;
+module RnTools;
 
-namespace RorinnnTools
+namespace RnTools
 {
 
 void __stdcall ManualMapShellcode(ManualMappingData* Data)
@@ -121,4 +121,4 @@ void __stdcall ManualMapShellcode(ManualMappingData* Data)
     Data->Module = ExceptionSupportFailed ? reinterpret_cast<HINSTANCE>(0x505050) : reinterpret_cast<HINSTANCE>(Base);
 }
 
-} // namespace RorinnnTools
+} // namespace RnTools

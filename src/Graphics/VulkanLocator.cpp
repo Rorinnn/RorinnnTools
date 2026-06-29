@@ -4,10 +4,10 @@ module;
 
 #include <Windows.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::Graphics
+namespace RnTools::Graphics
 {
 #pragma region 方法表
 
@@ -170,4 +170,4 @@ LocateStatus LocateVulkan(VulkanMethods& Out)
 }
 
 #pragma endregion
-} // namespace RorinnnTools::Graphics
+} // namespace RnTools::Graphics

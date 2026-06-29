@@ -4,10 +4,10 @@ module;
 
 #include <imgui.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::ImguiRorinnn
+namespace RnTools::ImguiRorinnn
 {
 namespace
 {
@@ -178,4 +178,4 @@ ImU32 ToU32(const ImVec4& Color)
     return ImGui::ColorConvertFloat4ToU32(Color);
 }
 
-} // namespace RorinnnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRorinnn

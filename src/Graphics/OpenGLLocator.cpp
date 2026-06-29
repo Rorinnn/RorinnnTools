@@ -4,10 +4,10 @@ module;
 
 #include <Windows.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::Graphics
+namespace RnTools::Graphics
 {
 #pragma region 方法表
 
@@ -371,4 +371,4 @@ LocateStatus LocateOpenGL(OpenGLMethods& Out)
 }
 
 #pragma endregion
-} // namespace RorinnnTools::Graphics
+} // namespace RnTools::Graphics

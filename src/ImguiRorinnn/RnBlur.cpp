@@ -6,10 +6,10 @@ module;
 #include <d3dcompiler.h>
 #include <imgui.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::ImguiRorinnn
+namespace RnTools::ImguiRorinnn
 {
 namespace
 {
@@ -333,4 +333,4 @@ void Dx11GaussianBlur::DrawPass(ID3D11ShaderResourceView* SourceView,
     D3dContext->Draw(3, 0);
 }
 
-} // namespace RorinnnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRorinnn

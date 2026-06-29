@@ -4,10 +4,10 @@ module;
 
 #include <imgui.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::ImguiRorinnn
+namespace RnTools::ImguiRorinnn
 {
 namespace
 {
@@ -93,4 +93,4 @@ void ClearAllAnimationStates()
     g_SmoothedValues.clear();
 }
 
-} // namespace RorinnnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRorinnn

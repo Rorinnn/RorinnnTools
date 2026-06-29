@@ -8,7 +8,7 @@ module;
 
 #include <imgui.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
 extern "C"
@@ -19,7 +19,7 @@ extern "C"
     extern const std::uint8_t _binary_FontAwesomeSolid_bin_end[];
 }
 
-namespace RorinnnTools::ImguiRorinnn
+namespace RnTools::ImguiRorinnn
 {
 namespace
 {
@@ -120,4 +120,4 @@ const FontSet& Fonts()
     return g_Fonts;
 }
 
-} // namespace RorinnnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRorinnn

@@ -4,10 +4,10 @@ module;
 #include <d3d11.h>
 #include <imgui.h>
 
-export module RorinnnTools:ImguiRorinnn;
+export module RnTools:ImguiRorinnn;
 import std;
 
-export namespace RorinnnTools::ImguiRorinnn
+export namespace RnTools::ImguiRorinnn
 {
 
 enum class Ease
@@ -627,4 +627,4 @@ bool BeginPanelChild(const char* Id, const PanelChildOptions& Options = {});
 void EndPanelChild();
 bool IsPanelChildContentVisible();
 
-} // namespace RorinnnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRorinnn

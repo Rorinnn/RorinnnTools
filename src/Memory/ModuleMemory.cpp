@@ -5,10 +5,10 @@ module;
 #include <Windows.h>
 #include <psapi.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::Memory
+namespace RnTools::Memory
 {
 static std::size_t GetSectionSize(const IMAGE_SECTION_HEADER& Section)
 {
@@ -89,4 +89,4 @@ bool GetModuleSection(const wchar_t* ModuleName, std::string_view SectionName, S
         return false;
     return GetModuleSection(Module.Base, SectionName, Info);
 }
-} // namespace RorinnnTools::Memory
+} // namespace RnTools::Memory

@@ -4,10 +4,10 @@ module;
 
 #include <Windows.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools
+namespace RnTools
 {
 namespace
 {
@@ -220,4 +220,4 @@ bool ManualMapDll(HANDLE Process,
     return true;
 }
 
-} // namespace RorinnnTools
+} // namespace RnTools

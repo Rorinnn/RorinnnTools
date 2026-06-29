@@ -2,10 +2,10 @@ module;
 
 #include <Windows.h>
 
-export module RorinnnTools:Graphics;
+export module RnTools:Graphics;
 import std;
 
-namespace RorinnnTools::Graphics::detail
+namespace RnTools::Graphics::detail
 {
 
 struct DummyWin32Window
@@ -40,9 +40,9 @@ ScopeExit<F> MakeScopeExit(F Callback)
     return ScopeExit<F>(std::move(Callback));
 }
 
-} // namespace RorinnnTools::Graphics::detail
+} // namespace RnTools::Graphics::detail
 
-export namespace RorinnnTools::Graphics
+export namespace RnTools::Graphics
 {
 
 enum class LocateStatus : std::uint32_t
@@ -123,4 +123,4 @@ LocateStatus LocateD3D12(D3D12Methods& Out);
 LocateStatus LocateOpenGL(OpenGLMethods& Out);
 LocateStatus LocateVulkan(VulkanMethods& Out);
 
-} // namespace RorinnnTools::Graphics
+} // namespace RnTools::Graphics

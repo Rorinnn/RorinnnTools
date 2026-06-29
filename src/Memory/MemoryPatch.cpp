@@ -2,10 +2,10 @@
 
 module;
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::Memory
+namespace RnTools::Memory
 {
 static std::vector<PatternByte> ToPatternBytes(std::span<const std::uint8_t> Bytes)
 {
@@ -118,4 +118,4 @@ std::size_t MemoryPatch::GetSize() const
 {
     return PatchBytes.size();
 }
-} // namespace RorinnnTools::Memory
+} // namespace RnTools::Memory

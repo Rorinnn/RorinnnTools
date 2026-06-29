@@ -4,10 +4,10 @@ module;
 
 #include <Windows.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::Graphics::detail
+namespace RnTools::Graphics::detail
 {
 void CreateDummyWindow(DummyWin32Window& Window)
 {
@@ -15,13 +15,13 @@ void CreateDummyWindow(DummyWin32Window& Window)
     Window.WindowClass.cbSize        = sizeof(Window.WindowClass);
     Window.WindowClass.lpfnWndProc   = DefWindowProcA;
     Window.WindowClass.hInstance     = GetModuleHandleA(nullptr);
-    Window.WindowClass.lpszClassName = "RorinnnTools_Graphics_DummyWindow";
+    Window.WindowClass.lpszClassName = "RnTools_Graphics_DummyWindow";
 
     RegisterClassExA(&Window.WindowClass);
 
     Window.WindowHandle = CreateWindowExA(0,
                                           Window.WindowClass.lpszClassName,
-                                          "RorinnnTools Dummy Window",
+                                          "RnTools Dummy Window",
                                           WS_OVERLAPPEDWINDOW,
                                           CW_USEDEFAULT,
                                           CW_USEDEFAULT,
@@ -39,4 +39,4 @@ void DestroyDummyWindow(DummyWin32Window& Window)
     UnregisterClassA(Window.WindowClass.lpszClassName, Window.WindowClass.hInstance);
 }
 
-} // namespace RorinnnTools::Graphics::detail
+} // namespace RnTools::Graphics::detail

@@ -1,9 +1,9 @@
 module;
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools
+namespace RnTools
 {
 BinaryReader::BinaryReader(const std::uint8_t* PData, std::size_t Size, std::size_t Offset) : PData(PData), Size(Size), Offset(Offset) {}
 
@@ -72,4 +72,4 @@ bool BinaryReader::CanRead(std::size_t Count) const
 {
     return IsValid() && Offset <= Size && Count <= Size - Offset;
 }
-} // namespace RorinnnTools
+} // namespace RnTools

@@ -4,9 +4,9 @@ module;
 
 #include <imgui.h>
 
-module RorinnnTools;
+module RnTools;
 
-namespace RorinnnTools::ImguiRorinnn
+namespace RnTools::ImguiRorinnn
 {
 
 StyleColorScope::StyleColorScope(ImGuiCol Index, const ImVec4& Color)
@@ -115,4 +115,4 @@ DisabledScope::~DisabledScope()
     ImGui::EndDisabled();
 }
 
-} // namespace RorinnnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRorinnn

@@ -5,9 +5,9 @@ module;
 #include <Windows.h>
 #include <imgui_internal.h>
 
-module RorinnnTools;
+module RnTools;
 
-namespace RorinnnTools::ImguiRorinnn
+namespace RnTools::ImguiRorinnn
 {
 namespace
 {
@@ -86,4 +86,4 @@ bool ShouldPreferGameTextInput(HWND Hwnd, UINT Msg, WPARAM WParam)
     return false;
 }
 
-} // namespace RorinnnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRorinnn

@@ -9,10 +9,10 @@ module;
 #include <shellapi.h>
 #endif
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::ImguiRorinnn
+namespace RnTools::ImguiRorinnn
 {
 namespace
 {
@@ -1166,4 +1166,4 @@ bool IsPanelChildContentVisible()
     return g_LastPanelChildContentVisible;
 }
 
-} // namespace RorinnnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRorinnn

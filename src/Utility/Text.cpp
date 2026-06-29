@@ -2,10 +2,10 @@ module;
 
 #include <Windows.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::Text
+namespace RnTools::Text
 {
 bool TextSlice::IsEmpty() const
 {
@@ -344,4 +344,4 @@ void AppendJsonHexField(std::string& Json, bool& NeedsComma, std::string_view Na
 {
     AppendJsonField(Json, NeedsComma, Name, FormatHex(Value));
 }
-} // namespace RorinnnTools::Text
+} // namespace RnTools::Text

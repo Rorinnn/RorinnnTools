@@ -1,9 +1,9 @@
 module;
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::Memory
+namespace RnTools::Memory
 {
 bool MemoryRange::IsValid() const
 {
@@ -48,22 +48,22 @@ bool TryWriteRaw(std::uintptr_t Ptr, std::span<const std::uint8_t> Bytes)
 
 bool TryReadString(std::uintptr_t Ptr, std::size_t MaxLength, std::string& Value)
 {
-    return RorinnnTools::Memory::TryReadString(Ptr, MaxLength, Value);
+    return RnTools::Memory::TryReadString(Ptr, MaxLength, Value);
 }
 
 std::string ReadString(std::uintptr_t Ptr, std::size_t MaxLength)
 {
-    return RorinnnTools::Memory::ReadString(Ptr, MaxLength);
+    return RnTools::Memory::ReadString(Ptr, MaxLength);
 }
 
 bool TryReadCString(std::uintptr_t Ptr, std::string& Value, std::size_t ChunkSize, std::size_t MaxLength)
 {
-    return RorinnnTools::Memory::TryReadCString(Ptr, Value, ChunkSize, MaxLength);
+    return RnTools::Memory::TryReadCString(Ptr, Value, ChunkSize, MaxLength);
 }
 
 std::string ReadCString(std::uintptr_t Ptr, std::size_t ChunkSize, std::size_t MaxLength)
 {
-    return RorinnnTools::Memory::ReadCString(Ptr, ChunkSize, MaxLength);
+    return RnTools::Memory::ReadCString(Ptr, ChunkSize, MaxLength);
 }
 } // namespace MemoryHelper
-} // namespace RorinnnTools::Memory
+} // namespace RnTools::Memory

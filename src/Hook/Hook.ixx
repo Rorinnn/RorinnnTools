@@ -2,11 +2,11 @@ module;
 
 #include <Windows.h>
 
-export module RorinnnTools:Hook;
+export module RnTools:Hook;
 import std;
 import :Memory;
 
-export namespace RorinnnTools::Hook
+export namespace RnTools::Hook
 {
 
 enum class VehHookType
@@ -111,7 +111,7 @@ class VTableHook
 };
 
 HookResult HookFromAddress(int Token, void* TargetAddress, void* RedirectAddress);
-HookResult HookFromSignature(int Token, RorinnnTools::Memory::SigScanner& Scanner, std::string_view Signature, void* RedirectAddress);
+HookResult HookFromSignature(int Token, RnTools::Memory::SigScanner& Scanner, std::string_view Signature, void* RedirectAddress);
 HookResult HookFromSymbol(int Token, const wchar_t* ModuleName, const char* SymbolName, void* RedirectAddress);
 HookResult HookFromImport(const wchar_t* ImportingModuleName, const char* ImportedModuleName, const char* SymbolName, void* RedirectAddress);
 HookResult HookFromImportAddress(int Token, const wchar_t* ImportingModuleName, const char* ImportedModuleName, const char* SymbolName, void* RedirectAddress);
@@ -121,4 +121,4 @@ void*      ReplaceVTableSlot(void* Instance, int Offset, void* RedirectAddress);
 
 HookResult HookFromVTable(int Token, void* Instance, int Offset, void* RedirectAddress);
 
-} // namespace RorinnnTools::Hook
+} // namespace RnTools::Hook

@@ -9,10 +9,10 @@ module;
 #include <botan/base64.h>
 #include <botan/hash.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools
+namespace RnTools
 {
 namespace
 {
@@ -379,4 +379,4 @@ bool BuildMachineId(std::string& MachineId)
     return BuildSha256Base64Url(Material, MachineId);
 }
 
-} // namespace RorinnnTools
+} // namespace RnTools

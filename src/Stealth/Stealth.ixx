@@ -1,9 +1,9 @@
 module;
 
-export module RorinnnTools:Stealth;
+export module RnTools:Stealth;
 import std;
 
-export namespace RorinnnTools::Stealth
+export namespace RnTools::Stealth
 {
 
 class CallStackSpoof
@@ -38,4 +38,4 @@ class CallStackSpoof
 template <class Ret, class... Args>
 Ret SpoofRetType(Ret (*)(Args...));
 
-} // namespace RorinnnTools::Stealth
+} // namespace RnTools::Stealth

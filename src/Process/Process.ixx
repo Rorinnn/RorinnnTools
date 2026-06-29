@@ -2,13 +2,13 @@ module;
 
 #include <Windows.h>
 
-export module RorinnnTools:Process;
+export module RnTools:Process;
 
-export namespace RorinnnTools
+export namespace RnTools
 {
 
 DWORD GetProcessIdByName(const wchar_t* Name);
 bool  IsCorrectTargetArchitecture(HANDLE Process);
 bool  EnableDebugPrivilege();
 
-} // namespace RorinnnTools
+} // namespace RnTools

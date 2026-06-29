@@ -4,10 +4,10 @@ module;
 
 #include <Windows.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::Memory
+namespace RnTools::Memory
 {
 static MemoryRange ToRange(const ModuleInfo& Module)
 {
@@ -250,4 +250,4 @@ std::uintptr_t SigScanner::TranslateFromScanAddress(std::uintptr_t Address) cons
         return Address;
     return Module.Base + (Address - CopyBase);
 }
-} // namespace RorinnnTools::Memory
+} // namespace RnTools::Memory

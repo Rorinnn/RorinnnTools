@@ -5,9 +5,9 @@ module;
 #include <Windows.h>
 #include <TlHelp32.h>
 
-module RorinnnTools;
+module RnTools;
 
-namespace RorinnnTools
+namespace RnTools
 {
 
 DWORD GetProcessIdByName(const wchar_t* Name)
@@ -66,4 +66,4 @@ bool EnableDebugPrivilege()
     return Ok;
 }
 
-} // namespace RorinnnTools
+} // namespace RnTools

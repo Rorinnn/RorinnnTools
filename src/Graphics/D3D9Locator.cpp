@@ -5,9 +5,9 @@ module;
 #include <Windows.h>
 #include <d3d9.h>
 
-module RorinnnTools;
+module RnTools;
 
-namespace RorinnnTools::Graphics
+namespace RnTools::Graphics
 {
 #pragma region 类型定义
 
@@ -68,4 +68,4 @@ LocateStatus LocateD3D9(D3D9Methods& Out)
 }
 
 #pragma endregion
-} // namespace RorinnnTools::Graphics
+} // namespace RnTools::Graphics

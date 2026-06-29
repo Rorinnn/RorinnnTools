@@ -1,9 +1,9 @@
 module;
 
-export module RorinnnTools:Text;
+export module RnTools:Text;
 import std;
 
-export namespace RorinnnTools::Text
+export namespace RnTools::Text
 {
 struct TextSlice
 {
@@ -52,4 +52,4 @@ void AppendJsonBoolField(std::string& Json, std::string_view Name, bool Value, b
 void AppendJsonBoolField(std::string& Json, bool& NeedsComma, std::string_view Name, bool Value);
 void AppendJsonHexField(std::string& Json, std::string_view Name, std::uint64_t Value, bool AddComma = true);
 void AppendJsonHexField(std::string& Json, bool& NeedsComma, std::string_view Name, std::uint64_t Value);
-} // namespace RorinnnTools::Text
+} // namespace RnTools::Text

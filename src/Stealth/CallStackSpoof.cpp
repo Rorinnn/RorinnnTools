@@ -5,10 +5,10 @@ module;
 #include <Windows.h>
 #include <Psapi.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::Stealth
+namespace RnTools::Stealth
 {
 
 // ShellCode 模板
@@ -356,4 +356,4 @@ bool CallStackSpoof::IsReady() const
     return m_Trampoline != 0;
 }
 
-} // namespace RorinnnTools::Stealth
+} // namespace RnTools::Stealth

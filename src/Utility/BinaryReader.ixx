@@ -1,9 +1,9 @@
 module;
 
-export module RorinnnTools:BinaryReader;
+export module RnTools:BinaryReader;
 import std;
 
-export namespace RorinnnTools
+export namespace RnTools
 {
 class BinaryReader
 {
@@ -40,4 +40,4 @@ class BinaryReader
     std::size_t         Size   = 0;
     std::size_t         Offset = 0;
 };
-} // namespace RorinnnTools
+} // namespace RnTools

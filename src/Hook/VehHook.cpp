@@ -5,10 +5,10 @@ module;
 #include <Windows.h>
 #include <TlHelp32.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::Hook
+namespace RnTools::Hook
 {
 bool HookResult::Succeeded() const
 {
@@ -764,4 +764,4 @@ const char* GetVehHookStatusText(VehHookStatus Status)
 }
 
 #pragma endregion
-} // namespace RorinnnTools::Hook
+} // namespace RnTools::Hook

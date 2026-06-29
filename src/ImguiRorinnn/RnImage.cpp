@@ -7,10 +7,10 @@ module;
 #include <wincodec.h>
 #include <wrl/client.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::ImguiRorinnn
+namespace RnTools::ImguiRorinnn
 {
 namespace
 {
@@ -183,4 +183,4 @@ void Image(const ImageTexture& Texture, const ImVec2& Size, const ImVec4& Tint, 
     ImGui::Image((ImTextureID)Texture.View, Size, ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), Tint, Border);
 }
 
-} // namespace RorinnnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRorinnn

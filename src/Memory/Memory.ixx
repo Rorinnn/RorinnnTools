@@ -1,9 +1,9 @@
 module;
 
-export module RorinnnTools:Memory;
+export module RnTools:Memory;
 import std;
 
-export namespace RorinnnTools::Memory
+export namespace RnTools::Memory
 {
 
 class SigScanner;
@@ -298,4 +298,4 @@ bool ReadPointerChainValue(std::uintptr_t Base, std::span<const std::ptrdiff_t> 
     return ReadValue(Address, Value);
 }
 
-} // namespace RorinnnTools::Memory
+} // namespace RnTools::Memory

@@ -16,7 +16,7 @@ add_requires("botan", {configs = {minimal = false}})
 local ProjectDir = os.scriptdir()
 local GeneratedDir = path.join(ProjectDir, "Generated")
 
-target("RorinnnTools")
+target("RnTools")
     set_kind("static")
     set_languages("cxx20")
     set_policy("build.fence", true)

@@ -2,9 +2,9 @@ module;
 
 #include <Windows.h>
 
-export module RorinnnTools:ManualMap;
+export module RnTools:ManualMap;
 
-namespace RorinnnTools
+namespace RnTools
 {
 
 using LoadLibraryA_t   = HINSTANCE(WINAPI*)(const char* FileName);
@@ -31,9 +31,9 @@ struct ManualMappingData
 
 void __stdcall ManualMapShellcode(ManualMappingData* Data);
 
-} // namespace RorinnnTools
+} // namespace RnTools
 
-export namespace RorinnnTools
+export namespace RnTools
 {
 
 bool ManualMapDll(HANDLE Process,
@@ -46,4 +46,4 @@ bool ManualMapDll(HANDLE Process,
                   DWORD  Reason                 = DLL_PROCESS_ATTACH,
                   LPVOID Reserved               = nullptr);
 
-} // namespace RorinnnTools
+} // namespace RnTools

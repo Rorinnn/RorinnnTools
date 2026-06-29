@@ -4,9 +4,9 @@ module;
 
 #include <Windows.h>
 
-module RorinnnTools;
+module RnTools;
 
-namespace RorinnnTools::Input
+namespace RnTools::Input
 {
 static constexpr std::size_t MaxChordKeys = 8;
 
@@ -56,4 +56,4 @@ bool TapVirtualKeyChord(const WORD* PVirtualKeys, std::size_t Count, DWORD Press
         Released = SendVirtualKey(PVirtualKeys[i - 1], false) && Released;
     return Released;
 }
-} // namespace RorinnnTools::Input
+} // namespace RnTools::Input

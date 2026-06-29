@@ -4,10 +4,10 @@ module;
 
 #include <Windows.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::Memory
+namespace RnTools::Memory
 {
 static bool IsHexDigit(char Ch)
 {
@@ -95,4 +95,4 @@ std::uintptr_t ResolveRelativeAddress(std::uintptr_t InstructionAddress, std::si
         return 0;
     return InstructionAddress + InstructionSize + Displacement;
 }
-} // namespace RorinnnTools::Memory
+} // namespace RnTools::Memory

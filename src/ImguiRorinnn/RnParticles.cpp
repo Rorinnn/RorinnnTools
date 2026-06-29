@@ -4,10 +4,10 @@ module;
 
 #include <imgui.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::ImguiRorinnn
+namespace RnTools::ImguiRorinnn
 {
 namespace
 {
@@ -121,4 +121,4 @@ void DrawSnowflakes(const char* Id, const ImVec2& Min, const ImVec2& Max, const 
     DrawList->PopClipRect();
 }
 
-} // namespace RorinnnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRorinnn

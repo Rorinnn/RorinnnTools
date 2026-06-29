@@ -1,4 +1,4 @@
-export module RorinnnTools;
+export module RnTools;
 
 export import :MachineId;
 export import :Process;

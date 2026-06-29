@@ -2,10 +2,10 @@ module;
 
 #include <cstdint>
 
-export module RorinnnTools:Algorithms;
+export module RnTools:Algorithms;
 import std;
 
-export namespace RorinnnTools
+export namespace RnTools
 {
 template <class Container>
 void SortUnique(Container& Values)
@@ -30,4 +30,4 @@ bool EraseValue(Container& Values, const Value& Target)
     Values.erase(It);
     return true;
 }
-} // namespace RorinnnTools
+} // namespace RnTools

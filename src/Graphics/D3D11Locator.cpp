@@ -6,9 +6,9 @@ module;
 #include <d3d11.h>
 #include <dxgi.h>
 
-module RorinnnTools;
+module RnTools;
 
-namespace RorinnnTools::Graphics
+namespace RnTools::Graphics
 {
 #pragma region 类型定义
 
@@ -147,4 +147,4 @@ LocateStatus LocateD3D11(D3D11Methods& Out)
 }
 
 #pragma endregion
-} // namespace RorinnnTools::Graphics
+} // namespace RnTools::Graphics

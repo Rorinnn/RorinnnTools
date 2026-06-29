@@ -4,10 +4,10 @@ module;
 
 #include <Windows.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::Memory
+namespace RnTools::Memory
 {
 bool ReadBytes(std::uintptr_t Ptr, void* PBuffer, std::size_t Size)
 {
@@ -112,4 +112,4 @@ bool ResolvePointerChain(std::uintptr_t Base, std::span<const std::ptrdiff_t> Of
     Address = Current;
     return true;
 }
-} // namespace RorinnnTools::Memory
+} // namespace RnTools::Memory

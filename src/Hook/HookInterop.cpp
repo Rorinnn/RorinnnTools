@@ -4,10 +4,10 @@ module;
 
 #include <Windows.h>
 
-module RorinnnTools;
+module RnTools;
 import std;
 
-namespace RorinnnTools::Hook
+namespace RnTools::Hook
 {
 static bool Unprotect(void* Region, DWORD& OriginalProtection)
 {
@@ -53,12 +53,12 @@ static void* FindImportThunk(HMODULE Module, const char* ImportedModuleName, con
 
     const auto       Base = reinterpret_cast<std::uintptr_t>(Module);
     IMAGE_DOS_HEADER Dos  = {};
-    if (!RorinnnTools::Memory::ReadValue(Base, Dos) || Dos.e_magic != IMAGE_DOS_SIGNATURE)
+    if (!RnTools::Memory::ReadValue(Base, Dos) || Dos.e_magic != IMAGE_DOS_SIGNATURE)
         return nullptr;
 
     IMAGE_NT_HEADERS64   Nt        = {};
     const std::uintptr_t NtAddress = Base + static_cast<std::uintptr_t>(Dos.e_lfanew);
-    if (!RorinnnTools::Memory::ReadValue(NtAddress, Nt) || Nt.Signature != IMAGE_NT_SIGNATURE)
+    if (!RnTools::Memory::ReadValue(NtAddress, Nt) || Nt.Signature != IMAGE_NT_SIGNATURE)
         return nullptr;
 
     const IMAGE_DATA_DIRECTORY& ImportDir = Nt.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT];
@@ -224,7 +224,7 @@ void* ReplaceVTableSlot(void* Instance, int Offset, void* RedirectAddress)
     return ReplaceFunctionPointer(GetVTableSlot(Instance, Offset), RedirectAddress);
 }
 
-HookResult HookFromSignature(int Token, RorinnnTools::Memory::SigScanner& Scanner, std::string_view Signature, void* RedirectAddress)
+HookResult HookFromSignature(int Token, RnTools::Memory::SigScanner& Scanner, std::string_view Signature, void* RedirectAddress)
 {
     void* Address = reinterpret_cast<void*>(Scanner.ScanText(Signature));
     return HookFromAddress(Token, Address, RedirectAddress);
@@ -250,7 +250,7 @@ HookResult HookFromImport(const wchar_t* ImportingModuleName, const char* Import
     if (!Slot)
         return MakeHookResult(VehHookStatus::InvalidArgument, nullptr);
 
-    void* Original = RorinnnTools::Hook::ReplaceFunctionPointer(reinterpret_cast<void**>(Slot), RedirectAddress);
+    void* Original = RnTools::Hook::ReplaceFunctionPointer(reinterpret_cast<void**>(Slot), RedirectAddress);
     return MakeHookResult(Original ? VehHookStatus::Ok : VehHookStatus::WriteFailed, Original);
 }
 
@@ -284,4 +284,4 @@ HookResult HookFromVTable(int Token, void* Instance, int Offset, void* RedirectA
     void* Target = *Slot;
     return HookFromAddress(Token, Target, RedirectAddress);
 }
-} // namespace RorinnnTools::Hook
+} // namespace RnTools::Hook
