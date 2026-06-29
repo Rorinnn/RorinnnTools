@@ -591,6 +591,10 @@ bool SegmentedControl(const char*       Id,
                       const char* const Items[],
                       int               ItemCount,
                       const ImVec2&     Size = ImVec2(0.0f, 0.0f));
+ImU32 ArgbToImColor(std::uint32_t Color);
+ImVec4 ArgbToImVec4(std::uint32_t Color);
+std::uint32_t ImVec4ToArgb(const ImVec4& Color);
+bool ColorEditArgb(const char* PId, std::uint32_t& Color);
 bool InputText(
     const char* Label, char* Buffer, std::size_t BufferSize, const char* Hint = nullptr, ImGuiInputTextFlags Flags = 0);
 bool InputInt(const char* Label, int* Value);

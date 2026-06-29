@@ -4,6 +4,54 @@ module;
 
 module RorinnnTools;
 
+namespace RorinnnTools::ImguiRorinnn
+{
+
+ImU32 ArgbToImColor(std::uint32_t Color)
+{
+    return IM_COL32((Color >> 16) & 0xFFu, (Color >> 8) & 0xFFu, Color & 0xFFu, (Color >> 24) & 0xFFu);
+}
+
+ImVec4 ArgbToImVec4(std::uint32_t Color)
+{
+    return ImVec4((float)((Color >> 16) & 0xFFu) / 255.0f,
+                  (float)((Color >> 8) & 0xFFu) / 255.0f,
+                  (float)(Color & 0xFFu) / 255.0f,
+                  (float)((Color >> 24) & 0xFFu) / 255.0f);
+}
+
+std::uint32_t ImVec4ToArgb(const ImVec4& Color)
+{
+    const float R = std::clamp(Color.x, 0.0f, 1.0f);
+    const float G = std::clamp(Color.y, 0.0f, 1.0f);
+    const float B = std::clamp(Color.z, 0.0f, 1.0f);
+    const float A = std::clamp(Color.w, 0.0f, 1.0f);
+    return ((std::uint32_t)(A * 255.0f + 0.5f) << 24) | ((std::uint32_t)(R * 255.0f + 0.5f) << 16) |
+           ((std::uint32_t)(G * 255.0f + 0.5f) << 8) | (std::uint32_t)(B * 255.0f + 0.5f);
+}
+
+bool ColorEditArgb(const char* PId, std::uint32_t& Color)
+{
+    ImVec4 ColorValue = ArgbToImVec4(Color);
+    const ImVec2 ButtonSize(24.0f, 24.0f);
+    bool Changed = false;
+    ImGui::ColorButton(PId, ColorValue, ImGuiColorEditFlags_AlphaPreview, ButtonSize);
+    if (ImGui::IsItemClicked())
+        ImGui::OpenPopup(PId);
+    if (ImGui::BeginPopup(PId))
+    {
+        Changed = ImGui::ColorPicker4("##ColorPicker", &ColorValue.x, ImGuiColorEditFlags_AlphaBar);
+        ImGui::EndPopup();
+    }
+    if (!Changed)
+        return false;
+
+    Color = ImVec4ToArgb(ColorValue);
+    return true;
+}
+
+} // namespace RorinnnTools::ImguiRorinnn
+
 namespace RorinnnTools::ImguiRorinnn::KnownColor
 {
 const ImVec4 ActiveBorder = ImVec4(0.705882f, 0.705882f, 0.705882f, 1.0f);
