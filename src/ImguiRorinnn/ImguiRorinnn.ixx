@@ -619,7 +619,7 @@ inline float CalcTableColumnWidth(std::initializer_list<std::string_view> Texts)
         Width = (std::max)(Width, ImGui::CalcTextSize(Text.data(), Text.data() + Text.size()).x);
 
     const ImGuiStyle& Style = ImGui::GetStyle();
-    return std::ceil(Width + Style.CellPadding.x * 2.0f + Style.FramePadding.x * 2.0f);
+    return std::ceil(Width + Style.CellPadding.x * 2.0f);
 }
 
 template <class Range, class Formatter>
@@ -633,7 +633,7 @@ float CalcTableColumnWidth(std::string_view Header, const Range& Rows, Formatter
     }
 
     const ImGuiStyle& Style = ImGui::GetStyle();
-    return std::ceil(Width + Style.CellPadding.x * 2.0f + Style.FramePadding.x * 2.0f);
+    return std::ceil(Width + Style.CellPadding.x * 2.0f);
 }
 
 void LabelValue(const char* Label, const char* Value);
