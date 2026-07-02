@@ -305,8 +305,8 @@ bool BeginModule(const char* Id, const char* Name, const ModuleHeaderOptions& Op
     const float  HeaderRowHeight = ImMax(NameHeight, 22.0f);
     const float  RowY            = Start.y + S.PanelPadding.y;
     const float  RowCenterY      = RowY + HeaderRowHeight * 0.5f;
-    const float  ArrowSize       = HasBody ? 20.0f : 0.0f;
-    const float  ArrowGap        = HasBody ? 8.0f : 0.0f;
+    const float  ArrowSize       = 20.0f;
+    const float  ArrowGap        = 8.0f;
     const float  ArrowX          = Start.x + S.PanelPadding.x + ArrowSize * 0.5f;
     const float  CheckboxSize    = 20.0f;
     const float  CheckboxX       = Start.x + S.PanelPadding.x + ArrowSize + ArrowGap;
