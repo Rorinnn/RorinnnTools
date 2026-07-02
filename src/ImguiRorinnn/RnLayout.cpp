@@ -295,19 +295,21 @@ bool BeginModule(const char* Id, const char* Name, const ModuleHeaderOptions& Op
         Storage->SetInt(StorageId, Options.DefaultOpen ? 1 : 0);
     }
 
-    bool        Open = Storage->GetInt(StorageId, 0) != 0;
+    const bool HasBody = Options.HasBody;
+    bool       Open    = HasBody && Storage->GetInt(StorageId, 0) != 0;
     const float OpenT =
         SmoothValue(ChildId(StorageId, "OpenT"), Open ? 1.0f : 0.0f, Options.AnimationSpeed, Open ? 1.0f : 0.0f);
     const float TopDescriptionT =
-        HasDescription && Options.DescriptionAtBottomWhenOpen ? 1.0f - Saturate(OpenT) : (HasDescription ? 1.0f : 0.0f);
+        HasDescription && HasBody && Options.DescriptionAtBottomWhenOpen ? 1.0f - Saturate(OpenT) : (HasDescription ? 1.0f : 0.0f);
     const bool   TopDescription  = TopDescriptionT > 0.001f;
     const float  HeaderRowHeight = ImMax(NameHeight, 22.0f);
     const float  RowY            = Start.y + S.PanelPadding.y;
     const float  RowCenterY      = RowY + HeaderRowHeight * 0.5f;
-    const float  ArrowSize       = 20.0f;
+    const float  ArrowSize       = HasBody ? 20.0f : 0.0f;
+    const float  ArrowGap        = HasBody ? 8.0f : 0.0f;
     const float  ArrowX          = Start.x + S.PanelPadding.x + ArrowSize * 0.5f;
     const float  CheckboxSize    = 20.0f;
-    const float  CheckboxX       = Start.x + S.PanelPadding.x + ArrowSize + 8.0f;
+    const float  CheckboxX       = Start.x + S.PanelPadding.x + ArrowSize + ArrowGap;
     const ImRect CheckboxBounds(ImVec2(CheckboxX, RowCenterY - CheckboxSize * 0.5f),
                                 ImVec2(CheckboxX + CheckboxSize, RowCenterY + CheckboxSize * 0.5f));
     const float  TextX =
@@ -325,16 +327,17 @@ bool BeginModule(const char* Id, const char* Name, const ModuleHeaderOptions& Op
     const ImVec2 HeaderSize(Width, HeaderHeight);
 
     const ImRect HeaderBounds(Start, ImVec2(Start.x + HeaderSize.x, Start.y + HeaderSize.y));
-    const bool   HeaderHovered = Options.Enabled && IsRectInteractive(HeaderBounds);
-    const bool   HeaderClicked = HeaderHovered && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
+    const bool   HeaderHovered = HasBody && Options.Enabled && IsRectInteractive(HeaderBounds);
+    const bool   HeaderClicked = HasBody && HeaderHovered && ImGui::IsMouseClicked(ImGuiMouseButton_Left);
 
-    const float BodySpacing        = S.ItemGap * Saturate(OpenT);
+    const float BodyOpenT          = HasBody ? Saturate(OpenT) : 0.0f;
+    const float BodySpacing        = S.ItemGap * BodyOpenT;
     const float LastBodyHeight     = Storage->GetFloat(BodyHeightId, 0.0f);
-    float       AnimatedBodyHeight = LastBodyHeight * Saturate(OpenT);
-    if (OpenT > 0.001f && AnimatedBodyHeight < 1.0f)
+    float       AnimatedBodyHeight = LastBodyHeight * BodyOpenT;
+    if (HasBody && OpenT > 0.001f && AnimatedBodyHeight < 1.0f)
         AnimatedBodyHeight = 1.0f;
 
-    const bool  BottomDescription = HasDescription && Options.DescriptionAtBottomWhenOpen && OpenT > 0.001f;
+    const bool  BottomDescription = HasDescription && HasBody && Options.DescriptionAtBottomWhenOpen && OpenT > 0.001f;
     const float BottomDescriptionHeight =
         BottomDescription ? ModuleBottomDescriptionHeight(BottomDescriptionTextHeight, OpenT) : 0.0f;
     const float  FrameHeight     = HeaderHeight + BodySpacing + AnimatedBodyHeight + BottomDescriptionHeight;
@@ -364,8 +367,11 @@ bool BeginModule(const char* Id, const char* Name, const ModuleHeaderOptions& Op
         Storage->SetInt(StorageId, Open ? 1 : 0);
     }
 
-    DrawModuleArrow(
-        DrawList, ImVec2(ArrowX, RowCenterY), ArrowSize, OpenT, Options.Enabled ? C.TextMuted : C.TextDisabled);
+    if (HasBody)
+    {
+        DrawModuleArrow(
+            DrawList, ImVec2(ArrowX, RowCenterY), ArrowSize, OpenT, Options.Enabled ? C.TextMuted : C.TextDisabled);
+    }
 
     const float NameY = Start.y + S.PanelPadding.y;
     DrawList->AddText(ImVec2(TextX, NameY), ToU32(Options.Enabled && ModuleActive ? C.Text : C.TextDisabled), Name);
@@ -386,7 +392,7 @@ bool BeginModule(const char* Id, const char* Name, const ModuleHeaderOptions& Op
         DrawList->PopClipRect();
     }
 
-    if (OpenT <= 0.001f || !Options.Enabled)
+    if (!HasBody || OpenT <= 0.001f || !Options.Enabled)
     {
         ImGui::EndChild();
         ImGui::PopID();

@@ -297,6 +297,7 @@ struct ModuleHeaderOptions
     bool        DefaultOpen                 = false;
     bool        Enabled                     = true;
     bool*       Checked                     = nullptr;
+    bool        HasBody                     = true;
     bool        DescriptionAtBottomWhenOpen = false;
     float       AnimationSpeed              = 18.0f;
 };
