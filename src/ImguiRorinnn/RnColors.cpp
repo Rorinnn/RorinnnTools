@@ -30,12 +30,11 @@ std::uint32_t ImVec4ToArgb(const ImVec4& Color)
            ((std::uint32_t)(G * 255.0f + 0.5f) << 8) | (std::uint32_t)(B * 255.0f + 0.5f);
 }
 
-bool ColorEditArgb(const char* PId, std::uint32_t& Color)
+bool ColorEditArgb(const char* PId, std::uint32_t& Color, const ImVec2& Size)
 {
     ImVec4 ColorValue = ArgbToImVec4(Color);
-    const ImVec2 ButtonSize(24.0f, 24.0f);
     bool Changed = false;
-    ImGui::ColorButton(PId, ColorValue, ImGuiColorEditFlags_AlphaPreview, ButtonSize);
+    ImGui::ColorButton(PId, ColorValue, ImGuiColorEditFlags_AlphaPreview, Size);
     if (ImGui::IsItemClicked())
         ImGui::OpenPopup(PId);
     if (ImGui::BeginPopup(PId))

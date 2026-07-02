@@ -604,6 +604,60 @@ bool Checkbox(const char* Label, bool* Value)
     return ImGui::Checkbox(Label, Value);
 }
 
+bool CheckboxPill(const char* Label, bool* Value)
+{
+    ImGuiWindow* Window = ImGui::GetCurrentWindow();
+    if (Window->SkipItems)
+        return false;
+
+    const ColorTokens& C         = Colors();
+    const SizeTokens&  S         = Sizes();
+    const ImGuiID      Id        = ImGui::GetID(Label);
+    const ImVec2       LabelSize = ImGui::CalcTextSize(Label, nullptr, true);
+    const float        Height    = S.ControlHeight;
+    const float        CheckSize = 18.0f;
+    const float        PaddingX  = 9.0f;
+    const float        TotalWidth = PaddingX * 2.0f + CheckSize + 6.0f + LabelSize.x;
+    const ImVec2       Pos        = ImGui::GetCursorScreenPos();
+    const ImRect       Bounds(Pos, ImVec2(Pos.x + TotalWidth, Pos.y + Height));
+
+    ImGui::ItemSize(Bounds);
+    if (!ImGui::ItemAdd(Bounds, Id))
+        return false;
+
+    bool       Hovered = false;
+    bool       Held    = false;
+    const bool Pressed = ImGui::ButtonBehavior(Bounds, Id, &Hovered, &Held);
+    if (Pressed && Value)
+        *Value = !*Value;
+
+    const bool   On         = Value && *Value;
+    const float  HoverT     = AnimateBool(ChildAnimId(Id, "CheckboxPillHover"), Hovered, 20.0f);
+    const float  OnT        = SmoothValue(ChildAnimId(Id, "CheckboxPillOn"), On ? 1.0f : 0.0f, 18.0f, On ? 1.0f : 0.0f);
+    const ImVec4 OffFill    = Blend(C.Surface, C.SurfaceHover, HoverT);
+    const ImVec4 Fill       = Blend(OffFill, WithAlpha(C.Accent, 0.22f), OnT);
+    const ImVec4 Border     = Blend(C.Border, WithAlpha(C.Accent, 0.52f), OnT);
+    const ImVec4 TextColor  = Blend(C.TextMuted, C.Text, OnT);
+    const float  Rounding   = S.ControlRounding;
+    ImDrawList*  DrawList   = Window->DrawList;
+
+    DrawList->AddRectFilled(Bounds.Min, Bounds.Max, ToU32(Fill), Rounding);
+    DrawList->AddRect(Bounds.Min, Bounds.Max, ToU32(Border), Rounding, 0, S.BorderWidth);
+
+    const ImVec2 CheckMin(Bounds.Min.x + PaddingX, Bounds.Min.y + (Height - CheckSize) * 0.5f);
+    const ImVec2 CheckMax(CheckMin.x + CheckSize, CheckMin.y + CheckSize);
+    DrawList->AddRectFilled(CheckMin, CheckMax, ToU32(On ? C.Accent : C.Surface), S.SmallRounding);
+    DrawList->AddRect(CheckMin, CheckMax, ToU32(On ? WithAlpha(KnownColor::Black, 0.42f) : C.Border), S.SmallRounding, 0, S.BorderWidth);
+    if (On)
+        ImGui::RenderCheckMark(DrawList,
+                               ImVec2(CheckMin.x + 3.0f, CheckMin.y + 3.0f),
+                               ToU32(KnownColor::Black),
+                               CheckSize - 6.0f);
+
+    DrawList->AddText(ImVec2(CheckMax.x + 6.0f, Bounds.Min.y + (Height - LabelSize.y) * 0.5f), ToU32(TextColor), Label);
+    return Pressed;
+}
+
 bool Toggle(const char* Label, bool* Value)
 {
     ImGuiWindow* Window = ImGui::GetCurrentWindow();
@@ -727,7 +781,7 @@ bool SegmentedControl(const char* Id, int* CurrentItem, const char* const Items[
     const ImGuiID      WidgetId = ImGui::GetID("##SegmentedControl");
     const ImVec2       Pos      = ImGui::GetCursorScreenPos();
     const float        Width    = Size.x > 0.0f ? Size.x : ImGui::GetContentRegionAvail().x;
-    const float        Height   = Size.y > 0.0f ? Size.y : S.ControlHeight + 2.0f;
+    const float        Height   = Size.y > 0.0f ? Size.y : S.ControlHeight;
     const ImRect       Bounds(Pos, ImVec2(Pos.x + Width, Pos.y + Height));
     const float        SegmentWidth   = Width / (float)ItemCount;
     const int          ClampedCurrent = std::clamp(*CurrentItem, 0, ItemCount - 1);

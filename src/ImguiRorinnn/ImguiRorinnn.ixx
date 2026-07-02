@@ -582,6 +582,7 @@ bool IconButtonWithText(const char*   Id,
                         ButtonVariant Variant = ButtonVariant::Secondary);
 
 bool Checkbox(const char* Label, bool* Value);
+bool CheckboxPill(const char* Label, bool* Value);
 bool Toggle(const char* Label, bool* Value);
 bool SliderFloat(const char* Label, float* Value, float Min, float Max, const char* Format = "%.2f");
 bool SliderInt(const char* Label, int* Value, int Min, int Max);
@@ -596,7 +597,7 @@ bool SegmentedControl(const char*       Id,
 ImU32 ArgbToImColor(std::uint32_t Color);
 ImVec4 ArgbToImVec4(std::uint32_t Color);
 std::uint32_t ImVec4ToArgb(const ImVec4& Color);
-bool ColorEditArgb(const char* PId, std::uint32_t& Color);
+bool ColorEditArgb(const char* PId, std::uint32_t& Color, const ImVec2& Size = ImVec2(24.0f, 24.0f));
 bool InputText(
     const char* Label, char* Buffer, std::size_t BufferSize, const char* Hint = nullptr, ImGuiInputTextFlags Flags = 0);
 bool InputInt(const char* Label, int* Value);
