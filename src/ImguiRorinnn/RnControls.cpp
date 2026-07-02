@@ -1019,7 +1019,8 @@ bool BeginTable(const char* Id, int ColumnCount, ImGuiTableFlags Flags, const Im
     ImDrawList*  DrawList = ImGui::GetWindowDrawList();
     DrawList->ChannelsSplit(2);
     DrawList->ChannelsSetCurrent(1);
-    ImGuiTableFlags TableFlags = (Flags & ~ImGuiTableFlags_BordersOuter) | ImGuiTableFlags_PadOuterX;
+    ImGuiTableFlags TableFlags =
+        (Flags & ~ImGuiTableFlags_BordersOuter) | ImGuiTableFlags_PadOuterX | ImGuiTableFlags_NoSavedSettings;
     if (!ImGui::BeginTable(Id, ColumnCount, TableFlags, OuterSize))
     {
         DrawList->ChannelsMerge();
@@ -1036,6 +1037,14 @@ bool BeginTable(const char* Id, int ColumnCount, ImGuiTableFlags Flags, const Im
     Frame.VarCount   = VarCount;
     g_TableFrames.push_back(Frame);
     return true;
+}
+
+void SetTableColumnWidth(int ColumnIndex, float Width)
+{
+    if (ColumnIndex < 0 || Width <= 0.0f)
+        return;
+
+    ImGui::TableSetColumnWidth(ColumnIndex, Width + ImGui::GetStyle().CellPadding.x * 2.0f);
 }
 
 void TableHeadersRow(const char* const Headers[], int HeaderCount)

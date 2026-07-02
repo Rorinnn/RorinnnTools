@@ -598,8 +598,15 @@ void IndeterminateProgressBar(const char* Id, const ImVec2& Size = ImVec2(0.0f, 
 void ProgressRing(const char* Id, float Fraction, float Radius = 0.0f, float Thickness = 0.0f);
 void Spinner(const char* Id, float Radius = 0.0f, float Thickness = 0.0f);
 bool BeginTable(const char* Id, int ColumnCount, ImGuiTableFlags Flags = 0, const ImVec2& OuterSize = ImVec2(0.0f, 0.0f));
+void SetTableColumnWidth(int ColumnIndex, float Width);
 void TableHeadersRow(const char* const Headers[], int HeaderCount);
 void EndTable();
+
+inline float CalcTableCellPaddingX()
+{
+    const SizeTokens& S = Sizes();
+    return (std::max)(10.0f, S.ItemGap);
+}
 
 inline float CalcTableColumnWidth(std::initializer_list<std::string_view> Texts)
 {
@@ -607,8 +614,14 @@ inline float CalcTableColumnWidth(std::initializer_list<std::string_view> Texts)
     for (std::string_view Text : Texts)
         Width = (std::max)(Width, ImGui::CalcTextSize(Text.data(), Text.data() + Text.size()).x);
 
-    const ImGuiStyle& Style = ImGui::GetStyle();
-    return std::ceil(Width + Style.CellPadding.x * 2.0f);
+    return std::ceil(Width);
+}
+
+inline float CalcCheckboxTableColumnWidth(std::string_view Header)
+{
+    const float HeaderWidth   = ImGui::CalcTextSize(Header.data(), Header.data() + Header.size()).x;
+    const float CheckboxWidth = ImGui::GetFrameHeight();
+    return std::ceil((std::max)(HeaderWidth, CheckboxWidth));
 }
 
 template <class Range, class Formatter>
@@ -621,8 +634,7 @@ float CalcTableColumnWidth(std::string_view Header, const Range& Rows, Formatter
         Width                  = (std::max)(Width, ImGui::CalcTextSize(Text.c_str()).x);
     }
 
-    const ImGuiStyle& Style = ImGui::GetStyle();
-    return std::ceil(Width + Style.CellPadding.x * 2.0f);
+    return std::ceil(Width);
 }
 
 void LabelValue(const char* Label, const char* Value);
