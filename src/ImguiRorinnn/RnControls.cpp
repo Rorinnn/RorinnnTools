@@ -739,7 +739,19 @@ bool SegmentedControl(const char* Id, int* CurrentItem, const char* const Items[
         return false;
     }
 
+    bool Hovered = false;
+    bool Held    = false;
     bool Changed = false;
+    const bool Pressed = ImGui::ButtonBehavior(Bounds, WidgetId, &Hovered, &Held);
+    int        HoveredIndex = -1;
+    if (Hovered)
+        HoveredIndex = std::clamp((int)((ImGui::GetIO().MousePos.x - Pos.x) / SegmentWidth), 0, ItemCount - 1);
+    if (Pressed && HoveredIndex >= 0 && *CurrentItem != HoveredIndex)
+    {
+        *CurrentItem = HoveredIndex;
+        Changed      = true;
+    }
+
     Window->DrawList->AddRectFilled(Bounds.Min, Bounds.Max, ToU32(C.Surface), S.ControlRounding);
     Window->DrawList->AddRect(Bounds.Min, Bounds.Max, ToU32(C.Border), S.ControlRounding, 0, S.BorderWidth);
 
@@ -753,35 +765,23 @@ bool SegmentedControl(const char* Id, int* CurrentItem, const char* const Items[
 
     for (int Index = 0; Index < ItemCount; Index++)
     {
-        ImGui::PushID(Index);
         const ImVec2 SegmentMin(Pos.x + SegmentWidth * (float)Index, Pos.y);
         const ImVec2 SegmentMax(SegmentMin.x + SegmentWidth, Pos.y + Height);
-        ImGui::SetCursorScreenPos(SegmentMin);
-        ImGui::InvisibleButton("##Segment", ImVec2(SegmentWidth, Height));
-        const bool Hovered = ImGui::IsItemHovered();
-        if (Hovered && Index != ClampedCurrent)
+        if (HoveredIndex == Index && Index != ClampedCurrent)
             Window->DrawList->AddRectFilled(ImVec2(SegmentMin.x + Inset, SegmentMin.y + Inset),
                                             ImVec2(SegmentMax.x - Inset, SegmentMax.y - Inset),
                                             ToU32(WithAlpha(C.SurfaceHover, 0.72f)),
                                             std::max(0.0f, S.ControlRounding - 2.0f));
-        if (ImGui::IsItemClicked(ImGuiMouseButton_Left) && *CurrentItem != Index)
-        {
-            *CurrentItem = Index;
-            Changed      = true;
-        }
 
         const char*  TextValue = Items[Index] ? Items[Index] : "";
         const ImVec2 TextSize  = ImGui::CalcTextSize(TextValue);
         const float  SelectedT = std::clamp(1.0f - std::fabs(AnimatedIndex - (float)Index), 0.0f, 1.0f);
-        const ImVec4 TextColor = Blend(C.Text, C.AccentText, EaseValue(Ease::OutCubic, SelectedT));
+        const ImVec4 TextColor = Blend(C.Text, KnownColor::Black, EaseValue(Ease::OutCubic, SelectedT));
         Window->DrawList->AddText(
             ImVec2(SegmentMin.x + (SegmentWidth - TextSize.x) * 0.5f, Pos.y + (Height - TextSize.y) * 0.5f),
             ToU32(TextColor),
             TextValue);
-        ImGui::PopID();
     }
-
-    ImGui::SetCursorScreenPos(ImVec2(Pos.x, Pos.y + Height));
     ImGui::PopID();
     return Changed;
 }
