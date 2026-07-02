@@ -7,7 +7,7 @@ module;
 
 module RnTools;
 
-namespace RnTools::ImguiRorinnn
+namespace RnTools::ImguiRn
 {
 namespace
 {
@@ -86,4 +86,4 @@ bool ShouldPreferGameTextInput(HWND Hwnd, UINT Msg, WPARAM WParam)
     return false;
 }
 
-} // namespace RnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRn

@@ -1,4 +1,4 @@
-// RnImage.cpp — ImguiRorinnn DX11 图片资源工具
+// RnImage.cpp — ImguiRn DX11 图片资源工具
 
 module;
 
@@ -10,7 +10,7 @@ module;
 module RnTools;
 import std;
 
-namespace RnTools::ImguiRorinnn
+namespace RnTools::ImguiRn
 {
 namespace
 {
@@ -183,4 +183,4 @@ void Image(const ImageTexture& Texture, const ImVec2& Size, const ImVec4& Tint, 
     ImGui::Image((ImTextureID)Texture.View, Size, ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f), Tint, Border);
 }
 
-} // namespace RnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRn

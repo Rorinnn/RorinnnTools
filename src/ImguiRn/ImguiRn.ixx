@@ -4,10 +4,10 @@ module;
 #include <d3d11.h>
 #include <imgui.h>
 
-export module RnTools:ImguiRorinnn;
+export module RnTools:ImguiRn;
 import std;
 
-export namespace RnTools::ImguiRorinnn
+export namespace RnTools::ImguiRn
 {
 
 enum class Ease
@@ -384,6 +384,13 @@ struct PanelChildOptions
     ImGuiWindowFlags Flags  = 0;
 };
 
+struct ModuleHeaderOptions
+{
+    bool  DefaultOpen    = true;
+    bool  Enabled        = true;
+    float AnimationSpeed = 18.0f;
+};
+
 class StyleColorScope
 {
   public:
@@ -652,5 +659,7 @@ void DrawTitleBarCollapseButton(const char* Id              = "RnTitleBarCollaps
 bool BeginPanelChild(const char* Id, const PanelChildOptions& Options = {});
 void EndPanelChild();
 bool IsPanelChildContentVisible();
+bool BeginModule(const char* Id, const char* Name, const ModuleHeaderOptions& Options = {});
+void EndModule();
 
-} // namespace RnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRn

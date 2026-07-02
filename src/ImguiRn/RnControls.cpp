@@ -1,4 +1,4 @@
-// RnControls.cpp — ImguiRorinnn 常用控件
+// RnControls.cpp — ImguiRn 常用控件
 
 module;
 
@@ -12,13 +12,14 @@ module;
 module RnTools;
 import std;
 
-namespace RnTools::ImguiRorinnn
+namespace RnTools::ImguiRn
 {
 namespace
 {
 static int  g_ManagedWindowFrame           = -1;
 static int  g_VisibleManagedWindowCount    = 0;
 static bool g_LastPanelChildContentVisible = false;
+static bool g_ModuleContentVisible         = false;
 
 struct TableFrame
 {
@@ -1229,4 +1230,31 @@ bool IsPanelChildContentVisible()
     return g_LastPanelChildContentVisible;
 }
 
-} // namespace RnTools::ImguiRorinnn
+bool BeginModule(const char* Id, const char* Name, const ModuleHeaderOptions& Options)
+{
+    ImGui::PushID(Id);
+    const ImGuiTreeNodeFlags HeaderFlags =
+        ImGuiTreeNodeFlags_SpanAvailWidth | (Options.DefaultOpen ? ImGuiTreeNodeFlags_DefaultOpen : 0);
+    const bool Open = Options.Enabled && ImGui::CollapsingHeader(Name ? Name : "", HeaderFlags);
+
+    ImGuiStorage* Storage    = ImGui::GetStateStorage();
+    const float   BodyHeight = Storage ? Storage->GetFloat(ImGui::GetID("##BodyHeight"), 0.0f) : 0.0f;
+
+    PanelChildOptions ChildOptions{};
+    ChildOptions.Size = ImVec2(0.0f, BodyHeight > 0.0f ? BodyHeight : 0.0f);
+    g_ModuleContentVisible = Open;
+    if (Open)
+        BeginPanelChild("##ModuleBody", ChildOptions);
+
+    ImGui::PopID();
+    return Open;
+}
+
+void EndModule()
+{
+    if (g_ModuleContentVisible)
+        EndPanelChild();
+    g_ModuleContentVisible = false;
+}
+
+} // namespace RnTools::ImguiRn

@@ -1,4 +1,4 @@
-// RnParticles.cpp — ImguiRorinnn 粒子效果
+// RnParticles.cpp — ImguiRn 粒子效果
 
 module;
 
@@ -7,7 +7,7 @@ module;
 module RnTools;
 import std;
 
-namespace RnTools::ImguiRorinnn
+namespace RnTools::ImguiRn
 {
 namespace
 {
@@ -121,4 +121,4 @@ void DrawSnowflakes(const char* Id, const ImVec2& Min, const ImVec2& Max, const 
     DrawList->PopClipRect();
 }
 
-} // namespace RnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRn

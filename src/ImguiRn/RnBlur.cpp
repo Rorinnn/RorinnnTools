@@ -1,4 +1,4 @@
-// RnBlur.cpp — ImguiRorinnn DX11 高斯模糊工具
+// RnBlur.cpp — ImguiRn DX11 高斯模糊工具
 
 module;
 
@@ -9,7 +9,7 @@ module;
 module RnTools;
 import std;
 
-namespace RnTools::ImguiRorinnn
+namespace RnTools::ImguiRn
 {
 namespace
 {
@@ -333,4 +333,4 @@ void Dx11GaussianBlur::DrawPass(ID3D11ShaderResourceView* SourceView,
     D3dContext->Draw(3, 0);
 }
 
-} // namespace RnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRn

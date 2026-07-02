@@ -1,4 +1,4 @@
-// RnLayout.cpp — ImguiRorinnn 布局组件
+// RnLayout.cpp — ImguiRn 布局组件
 
 module;
 
@@ -7,7 +7,7 @@ module;
 module RnTools;
 import std;
 
-namespace RnTools::ImguiRorinnn
+namespace RnTools::ImguiRn
 {
 namespace
 {
@@ -113,4 +113,4 @@ void EndIndented(float Width)
     ImGui::Unindent(Width);
 }
 
-} // namespace RnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRn

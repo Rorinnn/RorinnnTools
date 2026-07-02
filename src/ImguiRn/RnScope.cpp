@@ -6,7 +6,7 @@ module;
 
 module RnTools;
 
-namespace RnTools::ImguiRorinnn
+namespace RnTools::ImguiRn
 {
 
 StyleColorScope::StyleColorScope(ImGuiCol Index, const ImVec4& Color)
@@ -115,4 +115,4 @@ DisabledScope::~DisabledScope()
     ImGui::EndDisabled();
 }
 
-} // namespace RnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRn

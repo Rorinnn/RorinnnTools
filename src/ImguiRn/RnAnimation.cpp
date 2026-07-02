@@ -1,4 +1,4 @@
-// RnAnimation.cpp — ImguiRorinnn 即时模式动画工具
+// RnAnimation.cpp — ImguiRn 即时模式动画工具
 
 module;
 
@@ -7,7 +7,7 @@ module;
 module RnTools;
 import std;
 
-namespace RnTools::ImguiRorinnn
+namespace RnTools::ImguiRn
 {
 namespace
 {
@@ -93,4 +93,4 @@ void ClearAllAnimationStates()
     g_SmoothedValues.clear();
 }
 
-} // namespace RnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRn

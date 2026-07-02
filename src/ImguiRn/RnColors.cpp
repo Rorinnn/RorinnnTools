@@ -4,7 +4,7 @@ module;
 
 module RnTools;
 
-namespace RnTools::ImguiRorinnn
+namespace RnTools::ImguiRn
 {
 
 ImU32 ArgbToImColor(std::uint32_t Color)
@@ -49,9 +49,9 @@ bool ColorEditArgb(const char* PId, std::uint32_t& Color, const ImVec2& Size)
     return true;
 }
 
-} // namespace RnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRn
 
-namespace RnTools::ImguiRorinnn::KnownColor
+namespace RnTools::ImguiRn::KnownColor
 {
 const ImVec4 ActiveBorder = ImVec4(0.705882f, 0.705882f, 0.705882f, 1.0f);
 const ImVec4 ActiveCaption = ImVec4(0.6f, 0.705882f, 0.819608f, 1.0f);
@@ -228,4 +228,4 @@ const ImVec4 GradientInactiveCaption = ImVec4(0.843137f, 0.894118f, 0.94902f, 1.
 const ImVec4 MenuBar = ImVec4(0.941176f, 0.941176f, 0.941176f, 1.0f);
 const ImVec4 MenuHighlight = ImVec4(0.2f, 0.6f, 1.0f, 1.0f);
 const ImVec4 RebeccaPurple = ImVec4(0.4f, 0.2f, 0.6f, 1.0f);
-} // namespace RnTools::ImguiRorinnn::KnownColor
+} // namespace RnTools::ImguiRn::KnownColor

@@ -1,4 +1,4 @@
-// RnFonts.cpp — ImguiRorinnn 字体加载
+// RnFonts.cpp — ImguiRn 字体加载
 
 module;
 
@@ -19,7 +19,7 @@ extern "C"
     extern const std::uint8_t _binary_FontAwesomeSolid_bin_end[];
 }
 
-namespace RnTools::ImguiRorinnn
+namespace RnTools::ImguiRn
 {
 namespace
 {
@@ -120,4 +120,4 @@ const FontSet& Fonts()
     return g_Fonts;
 }
 
-} // namespace RnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRn

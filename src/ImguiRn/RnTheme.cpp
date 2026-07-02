@@ -1,4 +1,4 @@
-// RnTheme.cpp — ImguiRorinnn 主题令牌
+// RnTheme.cpp — ImguiRn 主题令牌
 
 module;
 
@@ -7,7 +7,7 @@ module;
 module RnTools;
 import std;
 
-namespace RnTools::ImguiRorinnn
+namespace RnTools::ImguiRn
 {
 namespace
 {
@@ -178,4 +178,4 @@ ImU32 ToU32(const ImVec4& Color)
     return ImGui::ColorConvertFloat4ToU32(Color);
 }
 
-} // namespace RnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRn

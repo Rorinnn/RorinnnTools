@@ -1,10 +1,10 @@
-// RnIcons.cpp — ImguiRorinnn 图标枚举
+// RnIcons.cpp — ImguiRn 图标枚举
 
 module;
 
 module RnTools;
 
-namespace RnTools::ImguiRorinnn
+namespace RnTools::ImguiRn
 {
 namespace
 {
@@ -72,4 +72,4 @@ const char* ToIconString(Icon Value)
     return IconLiteral(Value);
 }
 
-} // namespace RnTools::ImguiRorinnn
+} // namespace RnTools::ImguiRn
