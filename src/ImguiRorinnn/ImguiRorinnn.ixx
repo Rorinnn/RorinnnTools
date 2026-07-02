@@ -291,17 +291,6 @@ struct PanelOptions
     bool   FitHeight = false;
 };
 
-struct ModuleHeaderOptions
-{
-    const char* Description                 = nullptr;
-    bool        DefaultOpen                 = false;
-    bool        Enabled                     = true;
-    bool*       Checked                     = nullptr;
-    bool        HasBody                     = true;
-    bool        DescriptionAtBottomWhenOpen = false;
-    float       AnimationSpeed              = 18.0f;
-};
-
 struct VerticalSplitterOptions
 {
     float Height    = 0.0f;
@@ -523,8 +512,6 @@ bool BeginPanel(const char* Id, const PanelOptions& Options = {});
 void EndPanel();
 
 bool IsPanelContentVisible();
-bool BeginModule(const char* Id, const char* Name, const ModuleHeaderOptions& Options = {});
-void EndModule();
 
 void BeginIndented(float Width = 12.0f);
 void EndIndented(float Width = 12.0f);
